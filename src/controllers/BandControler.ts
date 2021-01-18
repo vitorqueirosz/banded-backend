@@ -34,17 +34,4 @@ export class BandController extends BaseController {
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
   }
-
-  @Get('')
-  public async index(request: Request, response: Response): Promise<Response> {
-    try {
-      const { name } = request.body;
-
-      const user_id = request.user.id;
-
-      return response.status(201).json(band);
-    } catch (error) {
-      return this.sendCreatedUpdateErrorResponse(response, request, error);
-    }
-  }
 }
