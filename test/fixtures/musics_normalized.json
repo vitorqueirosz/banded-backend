@@ -1,0 +1,165 @@
+{
+  "musics": [
+    {
+
+      "artist": "J. Cole",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b2736aca031ccc27d2e4dd829d14",
+      "album_name": "2014 Forest Hills Drive",
+      "music_name": "Wet Dreamz",
+      "duration_ms": 239320
+    },
+    {
+
+      "artist": "Joji",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b2733a927e16c14f2aeb7c004e19",
+      "album_name": "In Tongues",
+      "music_name": "worldstar money (interlude)",
+      "duration_ms": 126312
+    },
+    {
+
+      "artist": "Post Malone",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b27355404f712deb84d0650a4b41",
+      "album_name": "Stoney (Deluxe)",
+      "music_name": "Too Young",
+      "duration_ms": 237146
+    },
+    {
+
+      "artist": "Post Malone",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b27355404f712deb84d0650a4b41",
+      "album_name": "Stoney (Deluxe)",
+      "music_name": "Too Young",
+      "duration_ms": 237146
+    },
+    {
+
+      "artist": "BROCKHAMPTON",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b273a0c4a585a7d73b4943b9bf13",
+      "album_name": "SATURATION",
+      "music_name": "FACE",
+      "duration_ms": 259000
+    }
+    ,{
+
+      "artist": "Gus Dapperton",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b2732897ae5eb726e27e9d77c0e8",
+      "album_name": "Moodna, Once With Grace",
+      "music_name": "Moodna, Once With Grace",
+      "duration_ms": 198014
+    },
+    {
+
+      "artist": "Childish Gambino",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b273602ca5b83fe44b68074a74b2",
+      "album_name": "Summer Pack",
+      "music_name": "Feels Like Summer",
+      "duration_ms": 297404
+    },
+    {
+
+      "artist": "Jaden",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b2736bc4b0abc90292b207799266",
+      "album_name": "The Sunset Tapes: A Cool Tape Story",
+      "music_name": "SOHO",
+      "duration_ms": 208493
+    }
+    ,{
+
+      "artist": "BROCKHAMPTON",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b273ef51817e6a6563b6f7ce5872",
+      "album_name": "SATURATION III",
+      "music_name": "BLEACH",
+      "duration_ms": 273151
+    }
+    ,{
+
+      "artist": "Travis Scott",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b273072e9faef2ef7b6db63834a3",
+      "album_name": "ASTROWORLD",
+      "music_name": "COFFEE BEAN",
+      "duration_ms": 209115
+    }
+    ,{
+
+      "artist": "Gus Dapperton",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b2732897ae5eb726e27e9d77c0e8",
+      "album_name": "Moodna, Once With Grace",
+      "music_name": "Moodna, Once With Grace",
+      "duration_ms": 198014
+    }
+    ,{
+
+      "artist": "Gus Dapperton",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b27370ee79137c96ccc6689e78dd",
+      "album_name": "Yellow and Such",
+      "music_name": "The Fool",
+      "duration_ms": 213016
+    }
+    ,{
+
+      "artist": "French Montana",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b2738a31195a371b2233456f6c07",
+      "album_name": "Jungle Rules",
+      "music_name": "Unforgettable",
+      "duration_ms": 233901
+    }
+    ,{
+
+      "artist": "6LACK",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b273e1530b42603367fdb2208d88",
+      "album_name": "East Atlanta Love Letter",
+      "music_name": "Pretty Little Fears (feat. J. Cole)",
+      "duration_ms": 240341
+    }
+    ,{
+
+      "artist": "Cuco",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b27309d486c53669531775600e08",
+      "album_name": "Chiquito",
+      "music_name": "Summer Time High Time",
+      "duration_ms": 208067
+    }
+    ,{
+
+      "artist": "Jaden",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b27360ec4df52c2d724bc53ffec5",
+      "album_name": "ERYS (Deluxe)",
+      "music_name": "Summertime In Paris",
+      "duration_ms": 270960
+    }
+    ,{
+
+      "artist": "Lil Peep",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b273e813c020ab6245eae154ec16",
+      "album_name": "Star Shopping",
+      "music_name": "Star Shopping",
+      "duration_ms": 142000
+    }
+    ,{
+
+      "artist": "Jaden",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b2736bc4b0abc90292b207799266",
+      "album_name": "The Sunset Tapes: A Cool Tape Story",
+      "music_name": "SOHO",
+      "duration_ms": 208493
+    }
+    ,{
+
+      "artist": "Meltycanon",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b2739bdf187ef23cd9141709a931",
+      "album_name": "Old Compliation 3",
+      "music_name": "thankful",
+      "duration_ms": 146861
+    },
+    {
+
+      "artist": "Box Dreams",
+      "album_image": "https://i.scdn.co/image/ab67616d0000b273f900b973bea968292675683d",
+      "album_name": "Boxdreams",
+      "music_name": "Intro (Santa Barbara)",
+      "duration_ms": 254001
+    }
+  ]
+}
+
