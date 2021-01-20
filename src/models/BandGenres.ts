@@ -13,7 +13,16 @@ const bandGenres = new Schema(
     band: { type: Schema.Types.ObjectId, ref: 'Band', required: true },
     genre: { type: Schema.Types.ObjectId, ref: 'Genres', required: true },
   },
-  { toJSON: { virtuals: true } },
+  {
+    toJSON: {
+      transform: (_, ret): void => {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.__v;
+      },
+      virtuals: true,
+    },
+  },
 );
 
 // bandGenres.virtual('band', {

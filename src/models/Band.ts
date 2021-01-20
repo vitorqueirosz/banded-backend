@@ -1,4 +1,6 @@
 import { model, Schema, Document } from 'mongoose';
+import { BandMembers } from './BandMembers';
+import { BandMusics } from './BandMusics';
 
 export interface Band {
   _id: string;
@@ -6,9 +8,9 @@ export interface Band {
   image: string;
   owner: string;
   city: string;
-  musics?: string[];
+  musics?: BandMusics[];
   genres?: string[];
-  members?: string[];
+  members?: BandMembers[];
 }
 
 export interface BandModel extends Omit<Band, '_id'>, Document {}
@@ -32,13 +34,6 @@ const bandSchema = new Schema(
     },
   },
 );
-
-// bandSchema.virtual('ownerBand', {
-//   ref: 'User',
-//   localField: 'owner',
-//   foreignField: '_id',
-//   justOne: true,
-// });
 
 bandSchema.virtual('genre', {
   ref: 'BandGenres',

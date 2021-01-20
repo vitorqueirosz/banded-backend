@@ -1,6 +1,9 @@
 import { Band } from '@src/models/Band';
+import { BandMusics } from '@src/models/BandMusics';
+import { Genre } from '@src/models/Genre';
+import { User } from '@src/models/User';
 
-import { formattBandResponse } from '@src/utils/formattBandResponse';
+import { formattBandResponse, Response } from '@src/utils/formattBandResponse';
 
 interface Request {
   name: string;
@@ -15,12 +18,17 @@ export interface GenreResponse {
   };
 }
 
-export interface BandResponse extends Band {
+interface BandMusic extends Omit<BandMusics, 'genre'> {
+  genre: Genre;
+}
+export interface BandResponse extends Omit<Band, 'owner'> {
   genre: GenreResponse[];
+  owner: User;
+  musics: BandMusic[];
 }
 
 class FindBandByFiltersService {
-  public async execute({ name, genre, city }: Request): Promise<any> {
+  public async execute({ name, genre, city }: Request): Promise<Response[]> {
     if (genre) {
       const bands = await Band.find({
         genres: genre,
@@ -57,12 +65,24 @@ class FindBandByFiltersService {
         },
       },
       {
+        path: 'musics',
+        model: 'BandMusics',
+        populate: {
+          path: 'genre',
+          model: 'Genre',
+        },
+      },
+      {
+        path: 'members',
+        model: 'BandMembers',
+      },
+      {
         path: 'owner',
         model: 'User',
       },
     ]);
 
-    return formattBandResponse(bands);
+    return bands;
   }
 }
 

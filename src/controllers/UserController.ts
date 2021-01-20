@@ -11,6 +11,8 @@ export class UserController extends BaseController {
     try {
       const { name, email, password, city } = request.body;
 
+      console.log(name);
+
       const user = new User({ name, email, password, city });
       const newUser = await user.save();
 
