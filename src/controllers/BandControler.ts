@@ -2,6 +2,7 @@ import { Controller, ClassMiddleware, Post, Get } from '@overnightjs/core';
 import { ensureAuthenticated } from '@src/middlewares/ensureAuthenticated';
 
 import CreateBandService from '@src/services/CreateBandService';
+import FindBandByFiltersService from '@src/services/FindBandByFiltersService';
 import { Request, Response } from 'express';
 import { BaseController } from '.';
 
@@ -12,7 +13,6 @@ export class BandController extends BaseController {
   public async create(request: Request, response: Response): Promise<Response> {
     try {
       const { name, city, musics, genres, members } = request.body;
-
       const image = 'fake-image';
 
       const owner = request.user.id;
@@ -31,6 +31,30 @@ export class BandController extends BaseController {
 
       return response.status(201).json(band);
     } catch (error) {
+      console.log(error);
+      return this.sendCreatedUpdateErrorResponse(response, request, error);
+    }
+  }
+
+  @Get('')
+  public async index(request: Request, response: Response): Promise<Response> {
+    try {
+      const { name, genre, city } = request.query;
+
+      const user_id = request.user.id;
+
+      const findBandByFiltersService = new FindBandByFiltersService();
+
+      const band = await findBandByFiltersService.execute({
+        name: String(name) || '',
+        genre: String(genre) || '',
+        city: String(city) || '',
+      });
+
+      return response.json(band);
+    } catch (error) {
+      console.log(error);
+
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
   }

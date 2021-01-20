@@ -10,4 +10,5 @@ beforeAll(async () => {
   global.testRequest = supertest(server.getApp());
 });
 
-afterAll(() => server.close());
+// eslint-disable-next-line no-return-await
+afterAll(async () => await server.close());

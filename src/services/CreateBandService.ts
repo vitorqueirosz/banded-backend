@@ -35,6 +35,7 @@ class CreateBandService {
       city,
       owner,
       image,
+      genres: [...genres],
     });
 
     if (musics.length) {

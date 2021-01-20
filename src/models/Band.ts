@@ -1,6 +1,6 @@
 import { model, Schema, Document } from 'mongoose';
 
-interface Band {
+export interface Band {
   _id: string;
   name: string;
   image: string;
@@ -19,6 +19,7 @@ const bandSchema = new Schema(
     image: { type: String, required: true },
     city: { type: String, required: true },
     owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    genres: [{ type: Schema.Types.ObjectId, ref: 'Genre', required: true }],
   },
   {
     toJSON: {
@@ -32,22 +33,22 @@ const bandSchema = new Schema(
   },
 );
 
-bandSchema.virtual('ownerBand', {
-  ref: 'User',
-  localField: 'owner',
-  foreignField: '_id',
-  justOne: true,
-});
+// bandSchema.virtual('ownerBand', {
+//   ref: 'User',
+//   localField: 'owner',
+//   foreignField: '_id',
+//   justOne: true,
+// });
 
-bandSchema.virtual('genres', {
-  ref: 'BandGenre',
+bandSchema.virtual('genre', {
+  ref: 'BandGenres',
   localField: '_id',
   foreignField: 'band',
   justOne: false,
 });
 
 bandSchema.virtual('musics', {
-  ref: 'Music',
+  ref: 'BandMusics',
   localField: '_id',
   foreignField: 'band',
   justOne: false,

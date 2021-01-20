@@ -42,11 +42,11 @@ export class SetupServer extends Server {
   public setupExpress(): void {
     this.app.use(bodyParser.json());
 
-    this.app.use(
-      cors({
-        origin: '*',
-      }),
-    );
+    // this.app.use(
+    //   cors({
+    //     origin: '*',
+    //   }),
+    // );
   }
 
   public getApp(): Application {
