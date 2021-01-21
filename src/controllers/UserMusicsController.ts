@@ -1,10 +1,11 @@
-import { ClassMiddleware, Controller, Post } from '@overnightjs/core';
+import { ClassMiddleware, Controller, Get, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 
 import CreateUserMusicsService from '@src/services/CreateUserMusicsService';
 
 import { ensureAuthenticated } from '@src/middlewares/ensureAuthenticated';
 
+import { UserMusics } from '@src/models/UserMusics';
 import { BaseController } from '.';
 
 @Controller('userMusics')
@@ -25,6 +26,19 @@ export class UserMusicsController extends BaseController {
       });
 
       return response.status(201).json(userMusics);
+    } catch (error) {
+      return this.sendCreatedUpdateErrorResponse(response, request, error);
+    }
+  }
+
+  @Get('')
+  public async index(request: Request, response: Response): Promise<Response> {
+    try {
+      const user_id = request.user.id;
+
+      const userMusics = await UserMusics.find({ user: user_id });
+
+      return response.json(userMusics);
     } catch (error) {
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
