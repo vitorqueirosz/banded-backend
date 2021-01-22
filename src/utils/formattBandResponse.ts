@@ -11,25 +11,30 @@ export interface Response {
 
 export function formattBandResponse(bands: BandResponse[]): Response[] {
   const bandResponse = bands.map((band: BandResponse) => ({
+    id: band.id,
     name: band.name,
     city: band.city,
     image: band.image,
     owner: {
+      id: band.owner.id,
       name: band.owner.name,
       email: band.owner.email,
       city: band.owner.city,
     },
     musics: band.musics?.map(music => ({
+      id: music.id,
       name: music.name,
       duration: music.duration,
       genre: music.genre.name,
     })),
     members: band.members?.map(member => ({
-      name: member.name,
+      id: member.id || member.user.id,
+      name: member.name || member.user.name,
       function: member.function,
     })),
     genres: band.genre.map(g => ({
-      name: g.genre.name,
+      id: g.id,
+      name: g.name,
     })),
   }));
 

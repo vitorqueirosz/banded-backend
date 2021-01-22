@@ -11,7 +11,7 @@ interface BandGenresModel extends Omit<BandGenres, '_id'>, Document {}
 const bandGenres = new Schema(
   {
     band: { type: Schema.Types.ObjectId, ref: 'Band', required: true },
-    genre: { type: Schema.Types.ObjectId, ref: 'Genres', required: true },
+    genre: { type: Schema.Types.ObjectId, ref: 'Genre', required: true },
   },
   {
     toJSON: {
@@ -24,19 +24,5 @@ const bandGenres = new Schema(
     },
   },
 );
-
-// bandGenres.virtual('band', {
-//   ref: 'Band',
-//   localField: 'band',
-//   foreignField: '_id',
-//   justOne: false,
-// });
-
-// bandGenres.virtual('genres', {
-//   ref: 'Genre',
-//   localField: 'genre',
-//   foreignField: '_id',
-//   justOne: false,
-// });
 
 export const BandGenres = model<BandGenresModel>('BandGenres', bandGenres);

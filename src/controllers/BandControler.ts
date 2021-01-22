@@ -3,6 +3,7 @@ import { ensureAuthenticated } from '@src/middlewares/ensureAuthenticated';
 
 import CreateBandService from '@src/services/CreateBandService';
 import FindBandByFiltersService from '@src/services/FindBandByFiltersService';
+import FindBandsService from '@src/services/FindBandsService';
 import { Request, Response } from 'express';
 import { BaseController } from '.';
 
@@ -36,12 +37,27 @@ export class BandController extends BaseController {
     }
   }
 
-  @Get('')
+  @Get('bandList')
+  public async search(request: Request, response: Response): Promise<Response> {
+    try {
+      const { city } = request.query;
+
+      const findBandsService = new FindBandsService();
+
+      const bands = await findBandsService.execute({
+        city: String(city) || '',
+      });
+
+      return response.json(bands);
+    } catch (error) {
+      return this.sendCreatedUpdateErrorResponse(response, request, error);
+    }
+  }
+
+  @Get('filters')
   public async index(request: Request, response: Response): Promise<Response> {
     try {
       const { name, genre, city } = request.query;
-
-      const user_id = request.user.id;
 
       const findBandByFiltersService = new FindBandByFiltersService();
 
@@ -53,8 +69,6 @@ export class BandController extends BaseController {
 
       return response.json(band);
     } catch (error) {
-      console.log(error);
-
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
   }

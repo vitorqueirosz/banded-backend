@@ -1,7 +1,9 @@
-import { Controller, Post } from '@overnightjs/core';
+import { Controller, Get, Middleware, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { User } from '@src/models/User';
 import AuthService from '@src/services/authService';
+import { ensureAuthenticated } from '@src/middlewares/ensureAuthenticated';
+import UserBandService from '@src/services/UserBandsService';
 import { BaseController } from '.';
 
 @Controller('users')
@@ -11,12 +13,30 @@ export class UserController extends BaseController {
     try {
       const { name, email, password, city } = request.body;
 
-      console.log(name);
-
       const user = new User({ name, email, password, city });
       const newUser = await user.save();
 
       return response.status(201).json(newUser);
+    } catch (error) {
+      return this.sendCreatedUpdateErrorResponse(response, request, error);
+    }
+  }
+
+  @Get('')
+  @Middleware(ensureAuthenticated)
+  public async index(request: Request, response: Response): Promise<Response> {
+    try {
+      const user_id = request.user.id;
+
+      const user = await User.findOne({ _id: user_id });
+
+      const userBandsServices = new UserBandService();
+
+      const userBands = await userBandsServices.execute({
+        user_id,
+      });
+
+      return response.json({ user, bands: userBands });
     } catch (error) {
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }

@@ -55,6 +55,7 @@ class CreateBandService {
       await Promise.all(
         members.map(member =>
           BandMembers.create({
+            user: member.user ? member.user : null,
             name: member.name,
             function: member.function,
             band: band._id,

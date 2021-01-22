@@ -50,7 +50,7 @@ bandSchema.virtual('musics', {
 });
 
 bandSchema.virtual('members', {
-  ref: 'Member',
+  ref: 'BandMembers',
   localField: '_id',
   foreignField: 'band',
   justOne: false,

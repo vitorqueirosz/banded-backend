@@ -1,17 +1,19 @@
 import { model, Schema, Document } from 'mongoose';
 
 export interface BandMembers {
-  _id: string;
+  _id?: string;
   function: string;
   name: string;
   band: string;
+  user: string;
 }
 
 interface BandMembersModel extends Omit<BandMembers, '_id'>, Document {}
 
 const bandMembersSchema = new Schema(
   {
-    name: { type: String, required: true },
+    user: { type: Schema.Types.ObjectId, ref: 'Band', required: false },
+    name: { type: String, required: false },
     function: { type: String, required: true },
     band: { type: Schema.Types.ObjectId, ref: 'Band', required: true },
   },

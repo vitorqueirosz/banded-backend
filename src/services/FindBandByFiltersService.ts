@@ -1,4 +1,5 @@
 import { Band } from '@src/models/Band';
+import { BandMembers } from '@src/models/BandMembers';
 import { BandMusics } from '@src/models/BandMusics';
 import { Genre } from '@src/models/Genre';
 import { User } from '@src/models/User';
@@ -12,19 +13,32 @@ interface Request {
 }
 
 export interface GenreResponse {
-  genre: {
-    id: string;
-    name: string;
-  };
+  id: string;
+  name: string;
 }
 
-interface BandMusic extends Omit<BandMusics, 'genre'> {
+export interface BandMusic extends Omit<BandMusics, 'genre'> {
   genre: Genre;
+  id: string;
 }
-export interface BandResponse extends Omit<Band, 'owner'> {
+
+export interface UserResponse extends Omit<User, '_id'> {
+  id: string;
+}
+
+export interface MembersResponse extends Omit<BandMembers, 'user'> {
+  id: string;
+  user: UserResponse;
+}
+export interface BandResponse {
+  id: string;
+  name: string;
+  image: string;
+  city: string;
   genre: GenreResponse[];
-  owner: User;
+  owner: UserResponse;
   musics: BandMusic[];
+  members: MembersResponse[];
 }
 
 class FindBandByFiltersService {
@@ -57,12 +71,8 @@ class FindBandByFiltersService {
       name: new RegExp(name),
     }).populate([
       {
-        path: 'genre',
-        model: 'BandGenres',
-        populate: {
-          path: 'genre',
-          model: 'Genre',
-        },
+        path: 'genres',
+        model: 'Genre',
       },
       {
         path: 'musics',
