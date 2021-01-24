@@ -4,7 +4,7 @@ import { BandMusics } from '@src/models/BandMusics';
 import { Genre } from '@src/models/Genre';
 import { User } from '@src/models/User';
 
-import { formattBandResponse, Response } from '@src/utils/formattBandResponse';
+import { formatBandsResponse, Response } from '@src/utils/formatBandsResponse';
 
 interface Request {
   user_id: string;
@@ -75,7 +75,7 @@ class UserBandService {
       },
     ]);
 
-    const formattedBandResponse = formattBandResponse(bands);
+    const formattedBandResponse = formatBandsResponse(bands);
 
     const userBands = await BandMembers.find({ user: user_id }).populate([
       {

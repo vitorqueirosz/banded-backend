@@ -4,7 +4,7 @@ import { BandMusics } from '@src/models/BandMusics';
 import { Genre } from '@src/models/Genre';
 import { User } from '@src/models/User';
 
-import { formattBandResponse, Response } from '@src/utils/formattBandResponse';
+import { formatBandsResponse, Response } from '@src/utils/formatBandsResponse';
 
 interface Request {
   name: string;
@@ -35,7 +35,7 @@ export interface BandResponse {
   name: string;
   image: string;
   city: string;
-  genre: GenreResponse[];
+  genres: GenreResponse[];
   owner: UserResponse;
   musics: BandMusic[];
   members: MembersResponse[];
@@ -63,7 +63,7 @@ class FindBandByFiltersService {
         },
       ]);
 
-      return formattBandResponse(bands);
+      return formatBandsResponse(bands);
     }
 
     const bands = await Band.find({
@@ -85,6 +85,10 @@ class FindBandByFiltersService {
       {
         path: 'members',
         model: 'BandMembers',
+        populate: {
+          path: 'user',
+          model: 'User',
+        },
       },
       {
         path: 'owner',
@@ -92,7 +96,7 @@ class FindBandByFiltersService {
       },
     ]);
 
-    return bands;
+    return formatBandsResponse(bands);
   }
 }
 

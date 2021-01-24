@@ -3,10 +3,10 @@ import { BandMusics } from '@src/models/BandMusics';
 import { Genre } from '@src/models/Genre';
 import { User } from '@src/models/User';
 
-import { formatBandsResponse, Response } from '@src/utils/formatBandsResponse';
+import { formatBandResponse, Response } from '@src/utils/formatBandResponse';
 
 interface Request {
-  city: string;
+  id: string;
 }
 
 export interface GenreResponse {
@@ -25,10 +25,10 @@ export interface BandResponse extends Omit<Band, 'owner'> {
   musics: BandMusic[];
 }
 
-class FindBandsService {
-  public async execute({ city }: Request): Promise<Response[]> {
-    const bands = await Band.find({
-      city: new RegExp(city),
+class FindBandService {
+  public async execute({ id }: Request): Promise<Response> {
+    const band = await Band.findOne({
+      _id: id,
     }).populate([
       {
         path: 'genres',
@@ -56,8 +56,8 @@ class FindBandsService {
       },
     ]);
 
-    return formatBandsResponse(bands);
+    return formatBandResponse(band);
   }
 }
 
-export default FindBandsService;
+export default FindBandService;

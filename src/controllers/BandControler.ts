@@ -3,6 +3,7 @@ import { ensureAuthenticated } from '@src/middlewares/ensureAuthenticated';
 
 import CreateBandService from '@src/services/CreateBandService';
 import FindBandByFiltersService from '@src/services/FindBandByFiltersService';
+import FindBandService from '@src/services/FindBandService';
 import FindBandsService from '@src/services/FindBandsService';
 import { Request, Response } from 'express';
 import { BaseController } from '.';
@@ -32,7 +33,6 @@ export class BandController extends BaseController {
 
       return response.status(201).json(band);
     } catch (error) {
-      console.log(error);
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
   }
@@ -50,12 +50,13 @@ export class BandController extends BaseController {
 
       return response.json(bands);
     } catch (error) {
+      console.log(error);
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
   }
 
   @Get('filters')
-  public async index(request: Request, response: Response): Promise<Response> {
+  public async find(request: Request, response: Response): Promise<Response> {
     try {
       const { name, genre, city } = request.query;
 
@@ -69,6 +70,25 @@ export class BandController extends BaseController {
 
       return response.json(band);
     } catch (error) {
+      console.log(error);
+      return this.sendCreatedUpdateErrorResponse(response, request, error);
+    }
+  }
+
+  @Get(':id')
+  public async index(request: Request, response: Response): Promise<Response> {
+    try {
+      const { id } = request.params;
+
+      const findBandService = new FindBandService();
+
+      const band = await findBandService.execute({
+        id: String(id),
+      });
+
+      return response.json(band);
+    } catch (error) {
+      console.log(error);
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
   }

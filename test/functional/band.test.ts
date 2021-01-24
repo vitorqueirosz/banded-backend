@@ -100,5 +100,66 @@ describe('Band functional test', () => {
         .send(newBand);
       expect(response.status).toBe(400);
     });
+
+    // it('should return a band with formatted response', async () => {
+    //   const newBand = {
+    //     name: 'tsBand',
+    //     genres: ['600d995604c6f7323cce3abc', '600d995604c6f7323cce3abd'],
+    //     members: [{ name: 'Tie glaubermman', function: 'Baterista' }],
+    //     musics: [
+    //       {
+    //         name: '2031',
+    //         genre: '600d995604c6f7323cce3abc',
+    //         duration: 2020202,
+    //       },
+    //     ],
+    //     image: 'band-image',
+    //     city: 'salvador',
+    //   };
+
+    //   const bandResponse = await global.testRequest
+    //     .post('/band')
+    //     .set({ 'x-access-token': token })
+    //     .send(newBand);
+
+    //   const response = await global.testRequest
+    //     .get(`/band/${bandResponse.body.id}`)
+    //     .set({ 'x-access-token': token });
+
+    //   const formatedBandResponse = {
+    //     id: response.body.id,
+    //     name: 'tsBand',
+    //     city: 'salvador',
+    //     image: 'fake-image',
+    //     owner: {
+    //       id: response.body.owner.id,
+    //       name: 'John Smith',
+    //       email: 'john@smith.com',
+    //       city: 'Salvador',
+    //     },
+    //     musics: [
+    //       {
+    //         id: response.body.musics[0].id,
+    //         name: '2031',
+    //         duration: 2020202,
+    //         genre: 'Rock',
+    //       },
+    //     ],
+    //     members: [
+    //       {
+    //         id: response.body.members[0].id,
+    //         name: 'Tie glaubermman',
+    //         function: 'Baterista',
+    //       },
+    //     ],
+    //     genres: [
+    //       { id: response.body.genres[0].id, name: 'Rock' },
+    //       { id: response.body.genres[1].id, name: 'Indie' },
+    //     ],
+    //   };
+
+    //   expect(response.status).toBe(200);
+    //   expect(response.body).toEqual(formatedBandResponse);
+    // });
   });
 });

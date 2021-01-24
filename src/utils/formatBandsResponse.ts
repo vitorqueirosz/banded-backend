@@ -9,7 +9,7 @@ export interface Response {
   genres: Array<{ name: string }>;
 }
 
-export function formattBandResponse(bands: BandResponse[]): Response[] {
+export function formatBandsResponse(bands: BandResponse[]): Response[] {
   const bandResponse = bands.map((band: BandResponse) => ({
     id: band.id,
     name: band.name,
@@ -32,7 +32,7 @@ export function formattBandResponse(bands: BandResponse[]): Response[] {
       name: member.name || member.user.name,
       function: member.function,
     })),
-    genres: band.genre.map(g => ({
+    genres: band.genres.map(g => ({
       id: g.id,
       name: g.name,
     })),

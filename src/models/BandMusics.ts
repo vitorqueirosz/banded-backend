@@ -14,8 +14,8 @@ interface BandMusicsModel extends Omit<BandMusics, '_id'>, Document {}
 const bandMusicsSchema = new Schema(
   {
     name: { type: String, required: true },
-    genre: { type: Schema.Types.ObjectId, ref: 'Genres', required: true },
-    band: { type: Schema.Types.ObjectId, ref: 'Genres', required: true },
+    genre: { type: Schema.Types.ObjectId, ref: 'Genre', required: true },
+    band: { type: Schema.Types.ObjectId, ref: 'Band', required: true },
     duration: { type: Number, required: true },
   },
   {
