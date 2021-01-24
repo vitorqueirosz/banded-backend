@@ -46,7 +46,7 @@ describe('Band functional test', () => {
 
       const response = await global.testRequest
         .post('/band')
-        .set({ 'x-access-token': token })
+        .set({ authorization: `Bearer ${token}` })
         .send(newBand);
       expect(response.status).toBe(201);
     });
@@ -69,7 +69,7 @@ describe('Band functional test', () => {
 
       const response = await global.testRequest
         .post('/band')
-        .set({ 'x-access-token': token })
+        .set({ authorization: `Bearer ${token}` })
         .send(newBand);
       expect(response.status).toBe(400);
     });
@@ -92,11 +92,11 @@ describe('Band functional test', () => {
 
       await global.testRequest
         .post('/band')
-        .set({ 'x-access-token': token })
+        .set({ authorization: `Bearer ${token}` })
         .send(newBand);
       const response = await global.testRequest
         .post('/band')
-        .set({ 'x-access-token': token })
+        .set({ authorization: `Bearer ${token}` })
         .send(newBand);
       expect(response.status).toBe(400);
     });

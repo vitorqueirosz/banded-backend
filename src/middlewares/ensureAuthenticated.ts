@@ -1,4 +1,5 @@
 import AuthService from '@src/services/authService';
+
 import { NextFunction, Request, Response } from 'express';
 
 export interface DecodedToken {
@@ -12,7 +13,15 @@ export function ensureAuthenticated(
   response: Partial<Response>,
   next: NextFunction,
 ): void | Response {
-  const token = request.headers?.['x-access-token'];
+  const authHeader = request.headers?.authorization;
+
+  if (!authHeader) {
+    return response
+      .status?.(500)
+      .json({ code: 500, error: 'JWT token is missing' });
+  }
+
+  const [, token] = authHeader.split(' ');
 
   try {
     const decoded = AuthService.decodeToken(token as string);

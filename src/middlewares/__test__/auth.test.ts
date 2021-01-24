@@ -1,4 +1,5 @@
 import AuthService from '@src/services/authService';
+
 import { ensureAuthenticated } from '../ensureAuthenticated';
 
 describe('Authmiddleware', () => {
@@ -7,7 +8,7 @@ describe('Authmiddleware', () => {
 
     const requestFake = {
       headers: {
-        'x-access-token': jwtToken,
+        authorization: `Bearer ${jwtToken}`,
       },
     };
 
@@ -23,7 +24,7 @@ describe('Authmiddleware', () => {
   it('should return UNAUTHORIZED if there is a problem on the token verification', () => {
     const reqFake = {
       headers: {
-        'x-access-token': 'invalid token',
+        authorization: 'invalid token',
       },
     };
     const sendMock = jest.fn();
@@ -43,7 +44,9 @@ describe('Authmiddleware', () => {
 
   it('should return ANAUTHORIZED middleware if theres no token', () => {
     const reqFake = {
-      headers: {},
+      headers: {
+        authorization: '',
+      },
     };
     const sendMock = jest.fn();
     const resFake = {
@@ -53,10 +56,10 @@ describe('Authmiddleware', () => {
     };
     const nextFake = jest.fn();
     ensureAuthenticated(reqFake, resFake as any, nextFake);
-    expect(resFake.status).toHaveBeenCalledWith(401);
+    expect(resFake.status).toHaveBeenCalledWith(500);
     expect(sendMock).toHaveBeenCalledWith({
-      code: 401,
-      error: 'jwt must be provided',
+      code: 500,
+      error: 'JWT token is missing',
     });
   });
 });

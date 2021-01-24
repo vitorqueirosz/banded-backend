@@ -43,7 +43,7 @@ describe('When creating a new user musics list', () => {
 
     const response = await global.testRequest
       .post('/userMusics')
-      .set({ 'x-access-token': token })
+      .set({ authorization: `Bearer ${token}` })
       .send({ musics });
     expect(response.status).toBe(201);
   });
@@ -53,7 +53,7 @@ describe('When creating a new user musics list', () => {
 
     const response = await global.testRequest
       .post('/userMusics')
-      .set({ 'x-access-token': token })
+      .set({ authorization: `Bearer ${token}` })
       .send({ musics });
     expect(response.status).toBe(401);
   });
