@@ -12,7 +12,7 @@ interface BandMembersModel extends Omit<BandMembers, '_id'>, Document {}
 
 const bandMembersSchema = new Schema(
   {
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: false },
+    user: { type: Schema.Types.ObjectId, ref: 'UserMusician', required: false },
     name: { type: String, required: false },
     function: { type: String, required: true },
     band: { type: Schema.Types.ObjectId, ref: 'Band', required: true },

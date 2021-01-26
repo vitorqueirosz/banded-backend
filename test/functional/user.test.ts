@@ -60,6 +60,31 @@ describe('CreatUsers functional tests', () => {
         error: 'User validation failed: email: already exists in the database.',
       });
     });
+
+    it('should create a new user and user musician successfully', async () => {
+      const newUser = {
+        name: 'John Smith',
+        email: 'john@smith.com',
+        password: 'teste123123',
+        city: 'Salvador',
+        userMusician: {
+          function: 'Baterista',
+          bandsName: ['My Band'],
+          musics: [
+            {
+              album_image: 'algum-image',
+              album_name: 'algum-name',
+              music_name: 'my-music',
+              artist_name: 'artist-name',
+              duration_ms: 2000,
+            },
+          ],
+        },
+      };
+
+      const response = await global.testRequest.post('/users').send(newUser);
+      expect(response.status).toBe(201);
+    });
   });
 
   describe('When authenticatin a user', () => {

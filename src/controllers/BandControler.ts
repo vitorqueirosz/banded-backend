@@ -50,7 +50,6 @@ export class BandController extends BaseController {
 
       return response.json(bands);
     } catch (error) {
-      console.log(error);
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
   }
@@ -70,7 +69,6 @@ export class BandController extends BaseController {
 
       return response.json(band);
     } catch (error) {
-      console.log(error);
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
   }
@@ -88,7 +86,6 @@ export class BandController extends BaseController {
 
       return response.json(band);
     } catch (error) {
-      console.log(error);
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
   }

@@ -4,6 +4,8 @@ import { User } from '@src/models/User';
 import AuthService from '@src/services/authService';
 import { ensureAuthenticated } from '@src/middlewares/ensureAuthenticated';
 import UserBandService from '@src/services/UserBandsService';
+import { UserMusician } from '@src/models/UserMusician';
+import { UserMusics } from '@src/models/UserMusics';
 import { BaseController } from '.';
 
 @Controller('users')
@@ -11,10 +13,36 @@ export class UserController extends BaseController {
   @Post('')
   public async create(request: Request, response: Response): Promise<Response> {
     try {
-      const { name, email, password, city } = request.body;
+      const { name, email, password, city, userMusician } = request.body;
 
       const user = new User({ name, email, password, city });
       const newUser = await user.save();
+
+      if (userMusician) {
+        const { bands, bandsName, musics } = userMusician;
+
+        const musician = await UserMusician.create({
+          bands,
+          bandsName,
+          function: userMusician.function,
+        });
+
+        await Promise.all(
+          musics.map(async (music: UserMusics) => {
+            const userMusics = new UserMusics({ ...music, user: musician._id });
+
+            await userMusics.save();
+
+            musician.musics.push(userMusics);
+          }),
+        );
+
+        await musician.save();
+
+        return response
+          .status(201)
+          .json({ user: newUser, userMusician: musician });
+      }
 
       return response.status(201).json(newUser);
     } catch (error) {
