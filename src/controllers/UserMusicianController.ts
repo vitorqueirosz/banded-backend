@@ -51,6 +51,7 @@ export class UserMusicianController extends BaseController {
 
       return response.json(userMusicians);
     } catch (error) {
+      console.log(error);
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
   }

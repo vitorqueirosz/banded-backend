@@ -22,6 +22,7 @@ export class UserController extends BaseController {
         const { bands, bandsName, musics } = userMusician;
 
         const musician = await UserMusician.create({
+          user: newUser._id,
           bands,
           bandsName,
           function: userMusician.function,

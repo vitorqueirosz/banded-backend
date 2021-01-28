@@ -3,6 +3,8 @@ import { BandMusics } from '@src/models/BandMusics';
 import { BandMembers } from '@src/models/BandMembers';
 import { BandGenres } from '@src/models/BandGenres';
 import AppError from '@src/utils/errors/appError';
+import { UserMusician } from '@src/models/UserMusician';
+import { User } from '@src/models/User';
 
 interface Request {
   name: string;
@@ -37,6 +39,11 @@ class CreateBandService {
       image,
       genres: [...genres],
     });
+
+    await UserMusician.findOneAndUpdate(
+      { user: (owner as unknown) as User },
+      { $push: { bands: band._id } },
+    );
 
     if (musics.length) {
       await Promise.all(

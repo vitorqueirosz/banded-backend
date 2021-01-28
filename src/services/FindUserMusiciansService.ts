@@ -1,10 +1,11 @@
 import { Band } from '@src/models/Band';
-import { BandMusics } from '@src/models/BandMusics';
-import { Genre } from '@src/models/Genre';
 import { User } from '@src/models/User';
 import { UserMusician } from '@src/models/UserMusician';
 
-import { Response } from '@src/utils/formatBandsResponse';
+import {
+  formattedUserMusiciansResponse,
+  Response,
+} from '@src/utils/formattedUserMusicianResponse';
 
 export interface GenreResponse {
   genre: {
@@ -13,13 +14,16 @@ export interface GenreResponse {
   };
 }
 
-interface BandMusic extends Omit<BandMusics, 'genre'> {
-  genre: Genre;
+interface UserResponse extends Omit<User, '_id'> {
+  id: string;
 }
-export interface BandResponse extends Omit<Band, 'owner'> {
-  genre: GenreResponse[];
-  owner: User;
-  musics: BandMusic[];
+
+interface BandResponse extends Omit<Band, '_id'> {
+  id: string;
+}
+export interface UserMusicianResponse extends Omit<UserMusician, 'user'> {
+  user: UserResponse;
+  bands: BandResponse[];
 }
 
 class FindUserMusiciansService {
@@ -39,7 +43,7 @@ class FindUserMusiciansService {
       },
     ]);
 
-    return userMusicians;
+    return formattedUserMusiciansResponse(userMusicians);
   }
 }
 

@@ -1,14 +1,16 @@
 /* eslint-disable no-shadow */
 
 import mongoose, { Document, model, Schema } from 'mongoose';
+import { Band } from './Band';
+import { User } from './User';
 import { UserMusics } from './UserMusics';
 
 export interface UserMusician {
   _id?: string;
-  user: string;
+  user: User;
   function: string;
-  band: string;
-  bandName: string;
+  bands: Band[];
+  bandsName: string[];
   musics: UserMusics[];
 }
 
@@ -18,7 +20,7 @@ export interface UserMusicianModel
 
 const userMusicianSchema = new mongoose.Schema(
   {
-    user: { type: Schema.Types.ObjectId, ref: 'UserMusician', required: false },
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: false },
     function: { type: String, required: true },
     bands: [{ type: Schema.Types.ObjectId, ref: 'Band', required: false }],
     bandsName: [{ type: String, required: false }],

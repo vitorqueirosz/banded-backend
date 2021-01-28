@@ -3,7 +3,7 @@ import { BandMembers } from './BandMembers';
 import { BandMusics } from './BandMusics';
 
 export interface Band {
-  _id: string;
+  _id?: string;
   name: string;
   image: string;
   owner: string;
