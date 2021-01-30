@@ -1,5 +1,6 @@
 import { Controller, ClassMiddleware, Post, Get } from '@overnightjs/core';
 import { ensureAuthenticated } from '@src/middlewares/ensureAuthenticated';
+import AddBandMemberService from '@src/services/AddBandMemberService';
 
 import CreateBandService from '@src/services/CreateBandService';
 import FindBandByFiltersService from '@src/services/FindBandByFiltersService';
@@ -14,7 +15,7 @@ export class BandController extends BaseController {
   @Post('')
   public async create(request: Request, response: Response): Promise<Response> {
     try {
-      const { name, city, musics, genres, members } = request.body;
+      const { name, city, musics, genres, members, album } = request.body;
       const image = 'fake-image';
 
       const owner = request.user.id;
@@ -29,9 +30,29 @@ export class BandController extends BaseController {
         members,
         owner,
         image,
+        album,
       });
 
       return response.status(201).json(band);
+    } catch (error) {
+      return this.sendCreatedUpdateErrorResponse(response, request, error);
+    }
+  }
+
+  @Post('member')
+  public async add(request: Request, response: Response): Promise<Response> {
+    try {
+      const { user_id, band_id, memberFunction } = request.body;
+
+      const addBandMemberService = new AddBandMemberService();
+
+      const bandMember = await addBandMemberService.execute({
+        user_id,
+        band_id,
+        memberFunction,
+      });
+
+      return response.json(bandMember);
     } catch (error) {
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }

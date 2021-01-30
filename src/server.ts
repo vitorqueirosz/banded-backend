@@ -1,5 +1,5 @@
 import { Application, NextFunction, Response, Request } from 'express';
-
+import dotenv from 'dotenv';
 import { Server } from '@overnightjs/core';
 import bodyParser from 'body-parser';
 import './utils/module-alias';
@@ -17,6 +17,8 @@ import { UserMusicianController } from '@src/controllers/UserMusicianController'
 import * as database from './database';
 import { GenreController } from './controllers/GenreController';
 import AppError from './utils/errors/appError';
+
+dotenv.config();
 
 export class SetupServer extends Server {
   constructor(private port = process.env.APP_PORT) {

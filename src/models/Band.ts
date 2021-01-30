@@ -1,4 +1,6 @@
 import { model, Schema, Document } from 'mongoose';
+import { BandAlbums } from './BandAlbums';
+import { BandGenres } from './BandGenres';
 import { BandMembers } from './BandMembers';
 import { BandMusics } from './BandMusics';
 
@@ -8,9 +10,10 @@ export interface Band {
   image: string;
   owner: string;
   city: string;
-  musics?: BandMusics[];
-  genres?: string[];
-  members?: BandMembers[];
+  musics: BandMusics[];
+  genres: BandGenres[];
+  members: BandMembers[];
+  albums: BandAlbums[];
 }
 
 export interface BandModel extends Omit<Band, '_id'>, Document {}
@@ -21,7 +24,18 @@ const bandSchema = new Schema(
     image: { type: String, required: true },
     city: { type: String, required: true },
     owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    genres: [{ type: Schema.Types.ObjectId, ref: 'Genre', required: true }],
+    genres: [
+      { type: Schema.Types.ObjectId, ref: 'BandGenres', required: true },
+    ],
+    musics: [
+      { type: Schema.Types.ObjectId, ref: 'BandMusics', required: true },
+    ],
+    albums: [
+      { type: Schema.Types.ObjectId, ref: 'BandAlbums', required: true },
+    ],
+    members: [
+      { type: Schema.Types.ObjectId, ref: 'BandMembers', required: true },
+    ],
   },
   {
     toJSON: {
@@ -35,25 +49,25 @@ const bandSchema = new Schema(
   },
 );
 
-bandSchema.virtual('genre', {
-  ref: 'BandGenres',
-  localField: '_id',
-  foreignField: 'band',
-  justOne: false,
-});
+// bandSchema.virtual('genre', {
+//   ref: 'BandGenres',
+//   localField: '_id',
+//   foreignField: 'band',
+//   justOne: false,
+// });
 
-bandSchema.virtual('musics', {
-  ref: 'BandMusics',
-  localField: '_id',
-  foreignField: 'band',
-  justOne: false,
-});
+// bandSchema.virtual('musics', {
+//   ref: 'BandMusics',
+//   localField: '_id',
+//   foreignField: 'band',
+//   justOne: false,
+// });
 
-bandSchema.virtual('members', {
-  ref: 'BandMembers',
-  localField: '_id',
-  foreignField: 'band',
-  justOne: false,
-});
+// bandSchema.virtual('members', {
+//   ref: 'BandMembers',
+//   localField: '_id',
+//   foreignField: 'band',
+//   justOne: false,
+// });
 
 export const Band = model<BandModel>('Band', bandSchema);

@@ -32,7 +32,27 @@ class FindBandService {
     }).populate([
       {
         path: 'genres',
-        model: 'Genre',
+        model: 'BandGenres',
+        populate: {
+          path: 'genre',
+          model: 'Genre',
+        },
+      },
+      {
+        path: 'albums',
+        model: 'BandAlbums',
+        populate: {
+          path: 'genre',
+          model: 'Genre',
+        },
+      },
+      {
+        path: 'albums',
+        model: 'BandAlbums',
+        populate: {
+          path: 'musics',
+          model: 'BandMusics',
+        },
       },
       {
         path: 'musics',
@@ -40,6 +60,14 @@ class FindBandService {
         populate: {
           path: 'genre',
           model: 'Genre',
+        },
+      },
+      {
+        path: 'musics',
+        model: 'BandMusics',
+        populate: {
+          path: 'album',
+          model: 'BandAlbums',
         },
       },
       {

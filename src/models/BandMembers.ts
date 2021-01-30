@@ -8,7 +8,7 @@ export interface BandMembers {
   user: string;
 }
 
-interface BandMembersModel extends Omit<BandMembers, '_id'>, Document {}
+export interface BandMembersModel extends Omit<BandMembers, '_id'>, Document {}
 
 const bandMembersSchema = new Schema(
   {

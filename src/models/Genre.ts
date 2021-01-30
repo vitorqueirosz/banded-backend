@@ -1,7 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
 
 export interface Genre {
-  _id: string;
+  _id?: string;
   name: string;
 }
 

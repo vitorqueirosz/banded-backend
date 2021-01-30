@@ -1,26 +1,27 @@
-import { BandAlbumsResponse } from '@src/services/FindBandByFiltersService';
+import { BandMusic } from '@src/services/FindBandByFiltersService';
 import { model, Schema, Document } from 'mongoose';
-
 import { Genre } from './Genre';
 
-export interface BandMusics {
+export interface BandAlbums {
   _id?: string;
   name: string;
   genre: Genre;
   band: string;
-  duration: number;
-  album: BandAlbumsResponse;
+  year: number;
+  musics: BandMusic[];
 }
 
-interface BandMusicsModel extends Omit<BandMusics, '_id'>, Document {}
+interface BandAlbumsModel extends Omit<BandAlbums, '_id'>, Document {}
 
-const bandMusicsSchema = new Schema(
+const bandAlbumsSchema = new Schema(
   {
     name: { type: String, required: true },
     genre: { type: Schema.Types.ObjectId, ref: 'Genre', required: true },
     band: { type: Schema.Types.ObjectId, ref: 'Band', required: true },
-    duration: { type: Number, required: true },
-    album: { type: Schema.Types.ObjectId, ref: 'BandAlbums', required: true },
+    year: { type: Number, required: true },
+    musics: [
+      { type: Schema.Types.ObjectId, ref: 'BandMusics', required: true },
+    ],
   },
   {
     toJSON: {
@@ -33,7 +34,7 @@ const bandMusicsSchema = new Schema(
   },
 );
 
-export const BandMusics = model<BandMusicsModel>(
-  'BandMusics',
-  bandMusicsSchema,
+export const BandAlbums = model<BandAlbumsModel>(
+  'BandAlbums',
+  bandAlbumsSchema,
 );

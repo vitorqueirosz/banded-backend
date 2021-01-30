@@ -1,4 +1,6 @@
-import { UserMusics, UserMusicsModel } from '@src/models/UserMusics';
+import { User } from '@src/models/User';
+import { UserMusician } from '@src/models/UserMusician';
+import { UserMusics } from '@src/models/UserMusics';
 import AppError from '@src/utils/errors/appError';
 
 interface Request {
@@ -7,10 +9,7 @@ interface Request {
 }
 
 class CreateUserMusicsService {
-  public async execute({
-    user_id,
-    musics,
-  }: Request): Promise<UserMusicsModel[]> {
+  public async execute({ user_id, musics }: Request): Promise<void[]> {
     if (!musics.length) {
       throw new AppError(401, 'Incomplete data');
     }
@@ -26,16 +25,16 @@ class CreateUserMusicsService {
     }
 
     const userMusics = await Promise.all(
-      musics.map(music =>
-        UserMusics.create({
-          user: user_id,
-          album_image: music.album_image,
-          album_name: music.album_name,
-          music_name: music.music_name,
-          artist_name: music.artist_name,
-          duration_ms: music.duration_ms,
-        }),
-      ),
+      musics.map(async music => {
+        const userMusician = new UserMusics({ ...music, user: user_id });
+
+        userMusician.save();
+
+        await UserMusician.findOneAndUpdate(
+          { user: (user_id as unknown) as User },
+          { $push: { musics: userMusician as any } },
+        );
+      }),
     );
 
     return userMusics;

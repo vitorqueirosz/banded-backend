@@ -1,5 +1,5 @@
 import { DecodedToken } from '@src/middlewares/ensureAuthenticated';
-import { User } from '@src/models/User';
+
 import { compare, hash } from 'bcrypt';
 import { sign, verify } from 'jsonwebtoken';
 

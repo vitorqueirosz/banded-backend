@@ -1,9 +1,11 @@
 import { model, Schema, Document } from 'mongoose';
+import { Band } from './Band';
+import { Genre } from './Genre';
 
 export interface BandGenres {
-  _id: string;
-  band: string;
-  genre: string;
+  _id?: string;
+  band: Band;
+  genre: Genre;
 }
 
 interface BandGenresModel extends Omit<BandGenres, '_id'>, Document {}
