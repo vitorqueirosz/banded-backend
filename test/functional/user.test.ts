@@ -13,19 +13,29 @@ describe('CreatUsers functional tests', () => {
         email: 'john@smith.com',
         password: 'teste123123',
         city: 'Salvador',
+        userMusician: {
+          function: 'Baterista',
+          musics: [
+            {
+              album_image: 'algum-image',
+              album_name: 'algum-name',
+              music_name: 'my-music',
+              artist_name: 'artist-name',
+              duration_ms: 2000,
+            },
+          ],
+        },
       };
 
       const response = await global.testRequest.post('/users').send(newUser);
+
       await expect(
-        AuthService.comparePasswords(newUser.password, response.body.password),
+        AuthService.comparePasswords(
+          newUser.password,
+          response.body.user.password,
+        ),
       ).resolves.toBeTruthy();
       expect(response.status).toBe(201);
-      expect(response.body).toEqual(
-        expect.objectContaining({
-          ...newUser,
-          ...{ password: expect.any(String) },
-        }),
-      );
     });
 
     it('should return a validation error when try to create a new user with incomplete data', async () => {
@@ -33,6 +43,18 @@ describe('CreatUsers functional tests', () => {
         email: 'john@smith.com',
         password: 'teste123123',
         city: 'Salvador',
+        userMusician: {
+          function: 'Baterista',
+          musics: [
+            {
+              album_image: 'algum-image',
+              album_name: 'algum-name',
+              music_name: 'my-music',
+              artist_name: 'artist-name',
+              duration_ms: 2000,
+            },
+          ],
+        },
       };
 
       const response = await global.testRequest.post('/users').send(newUser);
@@ -94,6 +116,18 @@ describe('CreatUsers functional tests', () => {
         email: 'john@smith.com',
         password: 'teste123123',
         city: 'Salvador',
+        userMusician: {
+          function: 'Baterista',
+          musics: [
+            {
+              album_image: 'algum-image',
+              album_name: 'algum-name',
+              music_name: 'my-music',
+              artist_name: 'artist-name',
+              duration_ms: 2000,
+            },
+          ],
+        },
       };
 
       await new User(newUser).save();
@@ -105,7 +139,9 @@ describe('CreatUsers functional tests', () => {
       expect(response.status).toBe(200);
       expect(response.body).toEqual(
         expect.objectContaining({
-          ...newUser,
+          name: 'John Smith',
+          email: 'john@smith.com',
+          city: 'Salvador',
           ...{ password: expect.any(String) },
           token: expect.any(String),
         }),
@@ -118,6 +154,18 @@ describe('CreatUsers functional tests', () => {
         email: 'john@smith.com',
         password: 'teste123123',
         city: 'Salvador',
+        userMusician: {
+          function: 'Baterista',
+          musics: [
+            {
+              album_image: 'algum-image',
+              album_name: 'algum-name',
+              music_name: 'my-music',
+              artist_name: 'artist-name',
+              duration_ms: 2000,
+            },
+          ],
+        },
       };
 
       await new User(newUser).save();
@@ -135,6 +183,18 @@ describe('CreatUsers functional tests', () => {
         email: 'john@smith.com',
         password: 'teste123123',
         city: 'Salvador',
+        userMusician: {
+          function: 'Baterista',
+          musics: [
+            {
+              album_image: 'algum-image',
+              album_name: 'algum-name',
+              music_name: 'my-music',
+              artist_name: 'artist-name',
+              duration_ms: 2000,
+            },
+          ],
+        },
       };
 
       await new User(newUser).save();

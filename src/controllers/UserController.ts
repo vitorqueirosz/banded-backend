@@ -18,34 +18,30 @@ export class UserController extends BaseController {
       const user = new User({ name, email, password, city });
       const newUser = await user.save();
 
-      if (userMusician) {
-        const { bands, bandsName, musics } = userMusician;
+      const { bands, bandsName, musics } = userMusician;
 
-        const musician = await UserMusician.create({
-          user: newUser._id,
-          bands,
-          bandsName,
-          function: userMusician.function,
-        });
+      const musician = await UserMusician.create({
+        user: newUser._id,
+        bands,
+        bandsName,
+        function: userMusician.function,
+      });
 
-        await Promise.all(
-          musics.map(async (music: UserMusics) => {
-            const userMusics = new UserMusics({ ...music, user: musician._id });
+      await Promise.all(
+        musics.map(async (music: UserMusics) => {
+          const userMusics = new UserMusics({ ...music, user: musician._id });
 
-            await userMusics.save();
+          await userMusics.save();
 
-            musician.musics.push(userMusics);
-          }),
-        );
+          musician.musics.push(userMusics);
+        }),
+      );
 
-        await musician.save();
+      await musician.save();
 
-        return response
-          .status(201)
-          .json({ user: newUser, userMusician: musician });
-      }
-
-      return response.status(201).json(newUser);
+      return response
+        .status(201)
+        .json({ user: newUser, userMusician: musician });
     } catch (error) {
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }

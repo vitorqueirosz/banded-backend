@@ -15,7 +15,9 @@ export default class AuthService {
     password: string,
     hashedPassword: string,
   ): Promise<boolean> {
-    return compare(password, hashedPassword);
+    const isTruthy = await compare(password, hashedPassword);
+
+    return isTruthy;
   }
 
   public static generateToken(user: any): string {

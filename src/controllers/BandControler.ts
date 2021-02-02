@@ -15,7 +15,7 @@ export class BandController extends BaseController {
   @Post('')
   public async create(request: Request, response: Response): Promise<Response> {
     try {
-      const { name, city, musics, genres, members, album } = request.body;
+      const { name, city, musics, genres, members, albums } = request.body;
       const image = 'fake-image';
 
       const owner = request.user.id;
@@ -30,11 +30,12 @@ export class BandController extends BaseController {
         members,
         owner,
         image,
-        album,
+        albums,
       });
 
       return response.status(201).json(band);
     } catch (error) {
+      console.log(error);
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
   }

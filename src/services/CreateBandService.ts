@@ -15,7 +15,7 @@ interface Request {
   musics: BandMusics[];
   genres: string[];
   members: BandMembers[];
-  album: BandAlbums;
+  albums: BandAlbums[];
 }
 
 class CreateBandService {
@@ -27,7 +27,7 @@ class CreateBandService {
     members,
     owner,
     image,
-    album,
+    albums,
   }: Request): Promise<BandModel> {
     const bandExists = await Band.findOne({ owner, name });
     const limitBandExists = await Band.find({ owner });
@@ -47,12 +47,33 @@ class CreateBandService {
       image,
     });
 
-    const bandAlbum = await BandAlbums.create({
-      name: album.name,
-      year: album.year,
-      genre: album.genre,
-      band: band._id,
-    });
+    if (albums.length) {
+      await Promise.all(
+        albums.map(async album => {
+          const bandAlbum = new BandAlbums({
+            name: album.name,
+            genre: album.genre,
+            year: album.year,
+            band: band._id,
+          });
+
+          album.musics.map(async music => {
+            const bandMusic = new BandMusics({
+              ...music,
+              genre: album.genre,
+              band: band._id,
+              album: bandAlbum._id,
+            });
+
+            bandAlbum.musics.push(bandMusic);
+
+            await bandMusic.save();
+          });
+          band.albums.push(bandAlbum._id);
+          await bandAlbum.save();
+        }),
+      );
+    }
 
     await UserMusician.findOneAndUpdate(
       { user: (owner as unknown) as User },
@@ -65,13 +86,11 @@ class CreateBandService {
           const bandMusic = new BandMusics({
             ...music,
             band: band._id,
-            album: bandAlbum._id,
           });
 
           await bandMusic.save();
 
           band.musics.push(bandMusic);
-          bandAlbum.musics.push(bandMusic);
         }),
       );
     }
@@ -104,10 +123,7 @@ class CreateBandService {
       }),
     );
 
-    band.albums.push(bandAlbum._id);
-
     await band.save();
-    await bandAlbum.save();
 
     return band;
   }

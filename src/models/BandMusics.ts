@@ -20,7 +20,7 @@ const bandMusicsSchema = new Schema(
     genre: { type: Schema.Types.ObjectId, ref: 'Genre', required: true },
     band: { type: Schema.Types.ObjectId, ref: 'Band', required: true },
     duration: { type: Number, required: true },
-    album: { type: Schema.Types.ObjectId, ref: 'BandAlbums', required: true },
+    album: { type: Schema.Types.ObjectId, ref: 'BandAlbums', required: false },
   },
   {
     toJSON: {

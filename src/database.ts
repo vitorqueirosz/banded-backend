@@ -1,7 +1,7 @@
 import mongoose, { Mongoose } from 'mongoose';
 
 export const connect = async (): Promise<Mongoose> =>
-  mongoose.connect(String(process.env.MONGO_URL), {
+  mongoose.connect('mongodb://localhost:27017/banded', {
     useCreateIndex: true,
     useNewUrlParser: true,
     useFindAndModify: false,
