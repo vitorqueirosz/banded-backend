@@ -34,6 +34,7 @@
         "no-param-reassign": "off",
         "no-underscore-dangle": "off",
         "no-useless-constructor": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
         "import/prefer-default-export": "off",
         "prettier/prettier": "error",
         "camelcase": "off",

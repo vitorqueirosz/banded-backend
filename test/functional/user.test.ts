@@ -14,14 +14,14 @@ describe('CreatUsers functional tests', () => {
         password: 'teste123123',
         city: 'Salvador',
         userMusician: {
-          function: 'Baterista',
+          instrument: 'Baterista',
           musics: [
             {
               album_image: 'algum-image',
               album_name: 'algum-name',
               music_name: 'my-music',
               artist_name: 'artist-name',
-              duration_ms: 2000,
+              duration_ms: '2000',
             },
           ],
         },
@@ -44,14 +44,14 @@ describe('CreatUsers functional tests', () => {
         password: 'teste123123',
         city: 'Salvador',
         userMusician: {
-          function: 'Baterista',
+          instrument: 'Baterista',
           musics: [
             {
               album_image: 'algum-image',
               album_name: 'algum-name',
               music_name: 'my-music',
               artist_name: 'artist-name',
-              duration_ms: 2000,
+              duration_ms: '2000',
             },
           ],
         },
@@ -90,7 +90,7 @@ describe('CreatUsers functional tests', () => {
         password: 'teste123123',
         city: 'Salvador',
         userMusician: {
-          function: 'Baterista',
+          instrument: 'Baterista',
           bandsName: ['My Band'],
           musics: [
             {
@@ -98,7 +98,7 @@ describe('CreatUsers functional tests', () => {
               album_name: 'algum-name',
               music_name: 'my-music',
               artist_name: 'artist-name',
-              duration_ms: 2000,
+              duration_ms: '2000',
             },
           ],
         },
@@ -117,14 +117,14 @@ describe('CreatUsers functional tests', () => {
         password: 'teste123123',
         city: 'Salvador',
         userMusician: {
-          function: 'Baterista',
+          instrument: 'Baterista',
           musics: [
             {
               album_image: 'algum-image',
               album_name: 'algum-name',
               music_name: 'my-music',
               artist_name: 'artist-name',
-              duration_ms: 2000,
+              duration_ms: '2000',
             },
           ],
         },
@@ -155,14 +155,14 @@ describe('CreatUsers functional tests', () => {
         password: 'teste123123',
         city: 'Salvador',
         userMusician: {
-          function: 'Baterista',
+          instrument: 'Baterista',
           musics: [
             {
               album_image: 'algum-image',
               album_name: 'algum-name',
               music_name: 'my-music',
               artist_name: 'artist-name',
-              duration_ms: 2000,
+              duration_ms: '2000',
             },
           ],
         },
@@ -184,14 +184,14 @@ describe('CreatUsers functional tests', () => {
         password: 'teste123123',
         city: 'Salvador',
         userMusician: {
-          function: 'Baterista',
+          instrument: 'Baterista',
           musics: [
             {
               album_image: 'algum-image',
               album_name: 'algum-name',
               music_name: 'my-music',
               artist_name: 'artist-name',
-              duration_ms: 2000,
+              duration_ms: '2000',
             },
           ],
         },

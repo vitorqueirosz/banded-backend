@@ -5,7 +5,6 @@
   "license": "MIT",
   "dependencies": {
     "@overnightjs/core": "^1.7.5",
-    "@types/socket.io": "^2.1.12",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
@@ -23,7 +22,7 @@
     "multer": "^1.4.2",
     "pg": "^8.4.1",
     "prettier": "^2.1.2",
-    "socket.io": "2.3.0",
+    "socket.io": "^4.0.1",
     "typeorm": "^0.2.28"
   },
   "scripts": {
@@ -43,6 +42,7 @@
     "@types/module-alias": "^2.0.0",
     "@types/mongoose": "^5.10.3",
     "@types/multer": "^1.4.5",
+    "@types/socket.io": "^2.1.13",
     "@types/supertest": "^2.0.10",
     "@types/typescript": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^4.4.1",

@@ -1,8 +1,14 @@
-import { Controller, Post } from '@overnightjs/core';
+import { Controller, Get, Middleware, Post } from '@overnightjs/core';
+import { ensureAuthenticated } from '@src/middlewares/ensureAuthenticated';
 
 import { Genre } from '@src/models/Genre';
 
 import { Request, Response } from 'express';
+
+interface CustomGenre {
+  id: string;
+  name: string;
+}
 
 @Controller('genres')
 export class GenreController {
@@ -37,5 +43,18 @@ export class GenreController {
     );
 
     return response.status(201).json(genres);
+  }
+
+  @Get('')
+  @Middleware(ensureAuthenticated)
+  public async index(request: Request, response: Response): Promise<Response> {
+    const genres = await Genre.find();
+
+    const formattedGenres = genres.map((genre: CustomGenre) => ({
+      value: genre.id,
+      label: genre.name,
+    }));
+
+    return response.json(formattedGenres);
   }
 }

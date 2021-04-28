@@ -20,6 +20,7 @@ export function formatBandResponse(band: BandResponse): Response {
       name: band.owner.name,
       email: band.owner.email,
       city: band.owner.city,
+      avatar: band.owner.avatar,
     },
     musics: band.musics?.map(music => ({
       id: music.id,
@@ -47,7 +48,7 @@ export function formatBandResponse(band: BandResponse): Response {
     members: band.members?.map(member => ({
       id: member.id || member.user.id,
       name: member.name || member.user.name,
-      function: member.function,
+      instrument: member.instrument,
     })),
     genres: band.genres.map(g => ({
       id: g.id,

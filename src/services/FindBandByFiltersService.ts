@@ -4,12 +4,18 @@ import { BandGenres } from '@src/models/BandGenres';
 import { BandMembers } from '@src/models/BandMembers';
 import { BandMusics } from '@src/models/BandMusics';
 import { User } from '@src/models/User';
+import { checkBandsList } from '@src/utils/checkBands';
 
-import { formatBandsResponse, Response } from '@src/utils/formatBandsResponse';
+import {
+  BandsResponse,
+  formatBands,
+  formatBandsResponse,
+  Response,
+} from '@src/utils/formatBandsResponse';
 
 interface Request {
   name: string;
-  genre: string;
+  genres: string[];
   city: string;
 }
 
@@ -45,7 +51,7 @@ export interface BandResponse {
   name: string;
   image: string;
   city: string;
-  genres: GenreResponse[];
+  genres: Genre[];
   owner: UserResponse;
   musics: BandMusic[];
   albums: BandAlbumsResponse[];
@@ -53,20 +59,22 @@ export interface BandResponse {
 }
 
 class FindBandByFiltersService {
-  public async execute({ name, genre, city }: Request): Promise<Response[]> {
-    if (genre) {
+  public async execute({
+    name,
+    genres,
+    city,
+  }: Request): Promise<BandsResponse[]> {
+    if (genres.length) {
       const bands = await Band.find({
-        genres: (genre as unknown) as BandGenres,
+        genres: ({
+          $in: genres,
+        } as unknown) as Genre,
         city: new RegExp(city),
         name: new RegExp(name),
       }).populate([
         {
           path: 'genres',
-          model: 'BandGenres',
-          populate: {
-            path: 'genre',
-            model: 'Genre',
-          },
+          model: 'Genre',
         },
         {
           path: 'albums',
@@ -114,7 +122,7 @@ class FindBandByFiltersService {
         },
       ]);
 
-      return formatBandsResponse(bands);
+      return formatBands(checkBandsList(bands));
     }
 
     const bands = await Band.find({
@@ -123,11 +131,7 @@ class FindBandByFiltersService {
     }).populate([
       {
         path: 'genres',
-        model: 'BandGenres',
-        populate: {
-          path: 'genre',
-          model: 'Genre',
-        },
+        model: 'Genre',
       },
       {
         path: 'albums',
@@ -175,7 +179,7 @@ class FindBandByFiltersService {
       },
     ]);
 
-    return formatBandsResponse(bands);
+    return formatBands(checkBandsList(bands));
   }
 }
 

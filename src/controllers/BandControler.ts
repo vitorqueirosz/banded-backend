@@ -1,6 +1,9 @@
-import { Controller, ClassMiddleware, Post, Get } from '@overnightjs/core';
+import { Controller, Post, Get, Middleware } from '@overnightjs/core';
 import { ensureAuthenticated } from '@src/middlewares/ensureAuthenticated';
 import AddBandMemberService from '@src/services/AddBandMemberService';
+
+import uploadConfig from '@src/config/upload';
+import multer from 'multer';
 
 import CreateBandService from '@src/services/CreateBandService';
 import FindBandByFiltersService from '@src/services/FindBandByFiltersService';
@@ -9,14 +12,15 @@ import FindBandsService from '@src/services/FindBandsService';
 import { Request, Response } from 'express';
 import { BaseController } from '.';
 
+const upload = multer(uploadConfig);
 @Controller('band')
-@ClassMiddleware(ensureAuthenticated)
 export class BandController extends BaseController {
   @Post('')
+  @Middleware([ensureAuthenticated, upload.single('image')])
   public async create(request: Request, response: Response): Promise<Response> {
     try {
       const { name, city, musics, genres, members, albums } = request.body;
-      const image = 'fake-image';
+      const image = request.file.filename;
 
       const owner = request.user.id;
 
@@ -25,12 +29,12 @@ export class BandController extends BaseController {
       const band = await createBandService.execute({
         name,
         city,
-        musics,
-        genres,
-        members,
+        musics: JSON.parse(musics),
+        genres: JSON.parse(genres),
+        members: JSON.parse(members),
         owner,
         image,
-        albums,
+        albums: JSON.parse(albums),
       });
 
       return response.status(201).json(band);
@@ -43,14 +47,14 @@ export class BandController extends BaseController {
   @Post('member')
   public async add(request: Request, response: Response): Promise<Response> {
     try {
-      const { user_id, band_id, memberFunction } = request.body;
+      const { user_id, band_id, instrument } = request.body;
 
       const addBandMemberService = new AddBandMemberService();
 
       const bandMember = await addBandMemberService.execute({
         user_id,
         band_id,
-        memberFunction,
+        instrument,
       });
 
       return response.json(bandMember);
@@ -72,6 +76,7 @@ export class BandController extends BaseController {
 
       return response.json(bands);
     } catch (error) {
+      console.log(error);
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
   }
@@ -79,18 +84,19 @@ export class BandController extends BaseController {
   @Get('filters')
   public async find(request: Request, response: Response): Promise<Response> {
     try {
-      const { name, genre, city } = request.query;
+      const { name, genres, city } = request.query;
 
       const findBandByFiltersService = new FindBandByFiltersService();
 
       const band = await findBandByFiltersService.execute({
-        name: String(name) || '',
-        genre: String(genre) || '',
-        city: String(city) || '',
+        name: String(name || ''),
+        genres: (genres as string[]) ?? [],
+        city: String(city || ''),
       });
 
       return response.json(band);
     } catch (error) {
+      console.log(error);
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
   }

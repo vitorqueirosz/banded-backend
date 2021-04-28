@@ -3,15 +3,17 @@
 import mongoose, { Document, model, Schema } from 'mongoose';
 import { Band } from './Band';
 import { User } from './User';
+import { UserAlbums } from './UserAlbums';
 import { UserMusics } from './UserMusics';
 
 export interface UserMusician {
   _id?: string;
-  user: User;
-  function: string;
+  user: string;
+  instrument: string;
   bands: Band[];
   bandsName: string[];
   musics: UserMusics[];
+  albums: UserAlbums[];
 }
 
 export interface UserMusicianModel
@@ -21,11 +23,14 @@ export interface UserMusicianModel
 const userMusicianSchema = new mongoose.Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User', required: false },
-    function: { type: String, required: true },
+    instrument: { type: String, required: false },
     bands: [{ type: Schema.Types.ObjectId, ref: 'Band', required: false }],
     bandsName: [{ type: String, required: false }],
     musics: [
       { type: Schema.Types.ObjectId, ref: 'UserMusics', required: false },
+    ],
+    albums: [
+      { type: Schema.Types.ObjectId, ref: 'UserAlbums', required: false },
     ],
   },
   {

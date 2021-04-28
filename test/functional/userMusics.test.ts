@@ -29,7 +29,7 @@ describe('When creating a new user musics list', () => {
         album_name: '2014 Forest Hills Drive',
         music_name: 'No Role Modelz',
         artist_name: 'J.Cole',
-        duration_ms: 292986,
+        duration_ms: '292986',
       },
       {
         album_image:
@@ -37,7 +37,7 @@ describe('When creating a new user musics list', () => {
         album_name: 'An Awesome Wave',
         music_name: 'Breezeblocks',
         artist_name: 'alt-J',
-        duration_ms: 227080,
+        duration_ms: '227080',
       },
     ];
 

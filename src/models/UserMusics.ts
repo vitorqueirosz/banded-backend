@@ -7,7 +7,7 @@ export interface UserMusics {
   album_name: string;
   music_name: string;
   artist_name: string;
-  duration_ms: number;
+  duration_ms: string;
 }
 
 export interface UserMusicsModel extends Omit<UserMusics, '_id'>, Document {}
@@ -15,11 +15,8 @@ export interface UserMusicsModel extends Omit<UserMusics, '_id'>, Document {}
 const schema = new mongoose.Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    album_image: { type: String, required: true },
-    album_name: { type: String, required: true },
     music_name: { type: String, required: true },
-    artist_name: { type: String, required: true },
-    duration_ms: { type: Number, required: true },
+    duration_ms: { type: String, required: true },
   },
   {
     toJSON: {

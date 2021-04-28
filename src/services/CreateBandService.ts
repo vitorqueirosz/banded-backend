@@ -1,7 +1,6 @@
 import { Band, BandModel } from '@src/models/Band';
 import { BandMusics } from '@src/models/BandMusics';
 import { BandMembers } from '@src/models/BandMembers';
-import { BandGenres } from '@src/models/BandGenres';
 import AppError from '@src/utils/errors/appError';
 import { UserMusician } from '@src/models/UserMusician';
 import { User } from '@src/models/User';
@@ -29,6 +28,12 @@ class CreateBandService {
     image,
     albums,
   }: Request): Promise<BandModel> {
+    const user: User = await User.findOne({ _id: owner });
+
+    if (!user) {
+      throw new AppError(400, 'User not found');
+    }
+
     const bandExists = await Band.findOne({ owner, name });
     const limitBandExists = await Band.find({ owner });
 
@@ -45,6 +50,7 @@ class CreateBandService {
       city,
       owner,
       image,
+      genres,
     });
 
     if (albums.length) {
@@ -76,7 +82,7 @@ class CreateBandService {
     }
 
     await UserMusician.findOneAndUpdate(
-      { user: (owner as unknown) as User },
+      { user: owner as any },
       { $push: { bands: band._id } },
     );
 
@@ -105,7 +111,7 @@ class CreateBandService {
 
           if (member.user) {
             await UserMusician.findOneAndUpdate(
-              { user: (member._id as unknown) as User },
+              { user: member._id as any },
               { $push: { bands: band._id } },
             );
           }
@@ -113,15 +119,15 @@ class CreateBandService {
       );
     }
 
-    await Promise.all(
-      genres.map(async genre => {
-        const bandGenre = new BandGenres({ genre, band: band._id });
+    // await Promise.all(
+    //   genres.map(async genre => {
+    //     const bandGenre = new BandGenres({ genre, band: band._id });
 
-        await bandGenre.save();
+    //     await bandGenre.save();
 
-        band.genres.push(bandGenre);
-      }),
-    );
+    //     band.genres.push(bandGenre);
+    //   }),
+    // );
 
     await band.save();
 

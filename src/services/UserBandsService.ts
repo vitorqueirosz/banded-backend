@@ -3,11 +3,15 @@ import { BandMembers } from '@src/models/BandMembers';
 import { BandMusics } from '@src/models/BandMusics';
 import { Genre } from '@src/models/Genre';
 import { User } from '@src/models/User';
+import { UserMusician } from '@src/models/UserMusician';
+import AppError from '@src/utils/errors/appError';
 
-import { formatBandsResponse, Response } from '@src/utils/formatBandsResponse';
+import { formatBands, Response } from '@src/utils/formatBandsResponse';
 
 interface Request {
   user_id: string;
+  page?: number;
+  pageSize?: number;
 }
 
 export interface GenreResponse {
@@ -44,22 +48,44 @@ interface BandResponse {
   band: BandToResponse;
 }
 
+type UserBandResponse = {
+  userBands: Response[];
+  total: number;
+};
 class UserBandService {
-  public async execute({ user_id }: Request): Promise<Response[]> {
+  public async execute({ user_id }: Request): Promise<UserBandResponse> {
+    const user: User = await User.findOne({ _id: user_id });
+
+    if (!user) {
+      throw new AppError(400, 'User not found');
+    }
+
+    const bandsByUserMusician = await UserMusician.find({
+      user: user_id,
+    });
+
+    const [bandsName] = bandsByUserMusician.map(
+      (b: UserMusician) => b.bandsName,
+    );
+
     const bands = await Band.find({
       owner: user_id,
     }).populate([
       {
-        path: 'genre',
-        model: 'BandGenres',
+        path: 'genres',
+        model: 'Genre',
+      },
+      {
+        path: 'musics',
+        model: 'BandMusics',
         populate: {
           path: 'genre',
           model: 'Genre',
         },
       },
       {
-        path: 'musics',
-        model: 'BandMusics',
+        path: 'albums',
+        model: 'BandAlbums',
         populate: {
           path: 'genre',
           model: 'Genre',
@@ -75,7 +101,7 @@ class UserBandService {
       },
     ]);
 
-    const formattedBandResponse = formatBandsResponse(bands);
+    const formattedBandResponse = formatBands(bands);
 
     const userBands = await BandMembers.find({ user: user_id }).populate([
       {
@@ -131,7 +157,7 @@ class UserBandService {
       members: userBand.band.members?.map(member => ({
         id: member.id || member.user.id,
         name: member.name || member.user.name,
-        function: member.function,
+        instrument: member.instrument,
       })),
       genres: userBand.band.genres?.map(g => ({
         id: g.id,
@@ -140,11 +166,15 @@ class UserBandService {
     }));
 
     const mergedBandsResponse = [
+      ...bandsName,
       ...formattedBandResponse,
       ...userBandsResponse,
     ];
 
-    return mergedBandsResponse;
+    return {
+      userBands: mergedBandsResponse,
+      total: mergedBandsResponse.length,
+    };
   }
 }
 

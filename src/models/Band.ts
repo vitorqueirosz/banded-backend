@@ -1,6 +1,6 @@
+import { Genre } from '@src/services/FindBandByFiltersService';
 import { model, Schema, Document } from 'mongoose';
 import { BandAlbums } from './BandAlbums';
-import { BandGenres } from './BandGenres';
 import { BandMembers } from './BandMembers';
 import { BandMusics } from './BandMusics';
 
@@ -11,7 +11,7 @@ export interface Band {
   owner: string;
   city: string;
   musics: BandMusics[];
-  genres: BandGenres[];
+  genres: Genre[];
   members: BandMembers[];
   albums: BandAlbums[];
 }
@@ -21,12 +21,10 @@ export interface BandModel extends Omit<Band, '_id'>, Document {}
 const bandSchema = new Schema(
   {
     name: { type: String, required: true },
-    image: { type: String, required: true },
+    image: { type: String, required: false },
     city: { type: String, required: true },
     owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    genres: [
-      { type: Schema.Types.ObjectId, ref: 'BandGenres', required: true },
-    ],
+    genres: [{ type: Schema.Types.ObjectId, ref: 'Genre', required: true }],
     musics: [
       { type: Schema.Types.ObjectId, ref: 'BandMusics', required: true },
     ],
@@ -49,12 +47,12 @@ const bandSchema = new Schema(
   },
 );
 
-// bandSchema.virtual('genre', {
-//   ref: 'BandGenres',
-//   localField: '_id',
-//   foreignField: 'band',
-//   justOne: false,
-// });
+bandSchema.virtual('genre', {
+  ref: 'BandGenres',
+  localField: 'genres',
+  foreignField: 'genre',
+  justOne: false,
+});
 
 // bandSchema.virtual('musics', {
 //   ref: 'BandMusics',

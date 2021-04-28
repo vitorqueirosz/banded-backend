@@ -1,4 +1,3 @@
-import { User } from '@src/models/User';
 import { UserMusician } from '@src/models/UserMusician';
 import { UserMusics } from '@src/models/UserMusics';
 import AppError from '@src/utils/errors/appError';
@@ -14,25 +13,15 @@ class CreateUserMusicsService {
       throw new AppError(401, 'Incomplete data');
     }
 
-    const userMusicsExists = await UserMusics.find({
-      user: user_id,
-    });
-
-    if (userMusicsExists.length) {
-      await UserMusics.deleteMany({
-        user: user_id,
-      });
-    }
-
     const userMusics = await Promise.all(
       musics.map(async music => {
         const userMusician = new UserMusics({ ...music, user: user_id });
 
-        userMusician.save();
+        await userMusician.save();
 
         await UserMusician.findOneAndUpdate(
-          { user: (user_id as unknown) as User },
-          { $push: { musics: userMusician as any } },
+          { user: user_id as any },
+          { $push: { albums: userMusician as any } },
         );
       }),
     );

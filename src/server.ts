@@ -1,11 +1,11 @@
-import { Application, NextFunction, Response, Request } from 'express';
+import express, { Application, NextFunction, Response, Request } from 'express';
 import dotenv from 'dotenv';
 import { Server } from '@overnightjs/core';
+import { createServer } from 'http';
+import path from 'path';
+import { Server as SocketServer } from 'socket.io';
 import bodyParser from 'body-parser';
 import './utils/module-alias';
-
-import http from 'http';
-import socketIo, { Socket } from 'socket.io';
 
 import cors from 'cors';
 
@@ -13,13 +13,20 @@ import { UserController } from '@src/controllers/UserController';
 import { BandController } from '@src/controllers/BandControler';
 import { UserMusicsController } from '@src/controllers/UserMusicsController';
 import { UserMusicianController } from '@src/controllers/UserMusicianController';
+import { DefaultEventsMap } from 'socket.io/dist/typed-events';
+import { tmpFolder } from './config/upload';
 
 import * as database from './database';
 import { GenreController } from './controllers/GenreController';
 import AppError from './utils/errors/appError';
+import { UserAlbumsController } from './controllers/UserAlbumsController';
+import { UserChatsController } from './controllers/UserChatsController';
 
 dotenv.config();
 
+interface SocketResponse {
+  io: SocketServer<DefaultEventsMap, DefaultEventsMap>;
+}
 export class SetupServer extends Server {
   constructor(private port = process.env.APP_PORT) {
     super();
@@ -37,6 +44,8 @@ export class SetupServer extends Server {
     const genreController = new GenreController();
     const userMusicsController = new UserMusicsController();
     const userMusicianController = new UserMusicianController();
+    const userAlbumsController = new UserAlbumsController();
+    const userChatsController = new UserChatsController();
 
     this.addControllers([
       userController,
@@ -44,6 +53,8 @@ export class SetupServer extends Server {
       genreController,
       userMusicsController,
       userMusicianController,
+      userAlbumsController,
+      userChatsController,
     ]);
   }
 
@@ -55,6 +66,8 @@ export class SetupServer extends Server {
         origin: '*',
       }),
     );
+
+    this.app.use('/uploads', express.static(path.join(tmpFolder)));
 
     this.app.use(
       (err: Error, request: Request, response: Response, _: NextFunction) => {
@@ -79,28 +92,16 @@ export class SetupServer extends Server {
     await database.connect();
   }
 
-  private setupSocket(): void {
-    const server = http.createServer(this.app);
-    const io = socketIo(server);
-
-    io.on('connection', (socket: Socket) => {
-      const { id } = socket.handshake.query;
-      socket.join(id);
-
-      socket.on('send-message', ({ recipient, message }) => {
-        socket.broadcast.to(recipient).emit('receive-message', {
-          message,
-          sender: id,
-        });
-      });
-    });
-  }
-
   public async close(): Promise<void> {
     await database.close();
   }
 
-  public start(): void {
-    this.app.listen(this.port, () => console.log('Server listening'));
+  public start(): SocketResponse {
+    const server = createServer(this.app);
+    const io = new SocketServer(server);
+
+    server.listen(this.port, () => console.log('Server listening'));
+
+    return { io };
   }
 }

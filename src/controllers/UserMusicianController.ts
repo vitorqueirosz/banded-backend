@@ -14,17 +14,19 @@ export class UserMusicianController extends BaseController {
   @Post('')
   public async create(request: Request, response: Response): Promise<Response> {
     try {
-      const { bands, bandsName, musics } = request.body;
+      const { bands, bandsName, musics, instrument } = request.body;
+
+      const user = request.user.id;
 
       const musician = await UserMusician.create({
         bands,
         bandsName,
-        function: request.body.function,
+        instrument,
       });
 
       await Promise.all(
         musics.map(async (music: UserMusics) => {
-          const userMusics = new UserMusics({ ...music, user: musician._id });
+          const userMusics = new UserMusics({ ...music, user });
 
           await userMusics.save();
 

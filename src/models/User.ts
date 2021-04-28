@@ -7,6 +7,7 @@ import AuthService from '@src/services/authService';
 export interface User {
   _id?: string;
   name: string;
+  avatar: string;
   email: string;
   password: string;
   city: string;
@@ -45,20 +46,5 @@ schema.path('email').validate(
   'already exists in the database.',
   CUSTOM_VALIDATION.DUPLICATED,
 );
-
-// eslint-disable-next-line func-names
-schema.pre<UserModel>('save', async function (): Promise<void> {
-  if (!this.password || !this.isModified('password')) {
-    return;
-  }
-
-  try {
-    const hashedPassword = await AuthService.hashPassword(this.password);
-
-    this.password = hashedPassword;
-  } catch (error) {
-    console.error(`Error hashing the password for the user: ${this.name}`);
-  }
-});
 
 export const User = model<UserModel>('User', schema);

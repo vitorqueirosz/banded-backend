@@ -37,7 +37,7 @@ describe('Band functional test', () => {
       const newBand = {
         name: 'tsBand',
         genres: ['6001ee988f0c654298477bd1', '6001ee988f0c654298477bd2'],
-        members: [{ name: 'Tie glaubermman', function: 'Baterista' }],
+        members: [{ name: 'Tie glaubermman', instrument: 'Baterista' }],
         albums: [
           {
             name: 'initial-album',
@@ -76,7 +76,7 @@ describe('Band functional test', () => {
     // it('should not create a new band with incomplete data', async () => {
     //   const newBand = {
     //     genres: ['6001ee988f0c654298477bd1', '6001ee988f0c654298477bd2'],
-    //     members: [{ name: 'Tie glaubermman', function: 'Baterista' }],
+    //     members: [{ name: 'Tie glaubermman', instrument: 'Baterista' }],
     //     musics: [
     //       {
     //         name: '2031',
@@ -100,7 +100,7 @@ describe('Band functional test', () => {
     //   const newBand = {
     //     name: 'tsBand',
     //     genres: ['6001ee988f0c654298477bd1', '6001ee988f0c654298477bd2'],
-    //     members: [{ name: 'Tie glaubermman', function: 'Baterista' }],
+    //     members: [{ name: 'Tie glaubermman', instrument: 'Baterista' }],
     //     album: {
     //       name: 'initial-album',
     //       genre: '6001ee988f0c654298477bd1',
@@ -132,7 +132,7 @@ describe('Band functional test', () => {
     //   const firstBand = {
     //     name: 'firstBand',
     //     genres: ['6001ee988f0c654298477bd1', '6001ee988f0c654298477bd2'],
-    //     members: [{ name: 'Tie glaubermman', function: 'Baterista' }],
+    //     members: [{ name: 'Tie glaubermman', instrument: 'Baterista' }],
     //     album: {
     //       name: 'initial-album',
     //       genre: '6001ee988f0c654298477bd1',
@@ -152,7 +152,7 @@ describe('Band functional test', () => {
     //   const secondBand = {
     //     name: 'secondBand',
     //     genres: ['6001ee988f0c654298477bd1', '6001ee988f0c654298477bd2'],
-    //     members: [{ name: 'Tie glaubermman', function: 'Baterista' }],
+    //     members: [{ name: 'Tie glaubermman', instrument: 'Baterista' }],
     //     album: {
     //       name: 'initial-album',
     //       genre: '6001ee988f0c654298477bd1',
@@ -172,7 +172,7 @@ describe('Band functional test', () => {
     //   const thirdBand = {
     //     name: 'thirdBand',
     //     genres: ['6001ee988f0c654298477bd1', '6001ee988f0c654298477bd2'],
-    //     members: [{ name: 'Tie glaubermman', function: 'Baterista' }],
+    //     members: [{ name: 'Tie glaubermman', instrument: 'Baterista' }],
     //     album: {
     //       name: 'initial-album',
     //       genre: '6001ee988f0c654298477bd1',
@@ -192,7 +192,7 @@ describe('Band functional test', () => {
     //   const fourthBand = {
     //     name: 'fourthBand',
     //     genres: ['6001ee988f0c654298477bd1', '6001ee988f0c654298477bd2'],
-    //     members: [{ name: 'Tie glaubermman', function: 'Baterista' }],
+    //     members: [{ name: 'Tie glaubermman', instrument: 'Baterista' }],
     //     album: {
     //       name: 'initial-album',
     //       genre: '6001ee988f0c654298477bd1',
@@ -244,7 +244,7 @@ describe('Band functional test', () => {
     //       password: 'vitor123123',
     //       city: 'salvador',
     //       userMusician: {
-    //         function: 'Baterista',
+    //         instrument: 'Baterista',
     //         musics: [
     //           {
     //             album_image: 'algum-image',
@@ -264,7 +264,7 @@ describe('Band functional test', () => {
     //     const newBand = {
     //       name: 'tsBand',
     //       genres: ['6001ee988f0c654298477bd1', '6001ee988f0c654298477bd2'],
-    //       members: [{ name: 'Tie glaubermman', function: 'Baterista' }],
+    //       members: [{ name: 'Tie glaubermman', instrument: 'Baterista' }],
     //       album: {
     //         name: 'initial-album',
     //         genre: '6001ee988f0c654298477bd1',
@@ -292,7 +292,7 @@ describe('Band functional test', () => {
     //       .send({
     //         band_id: bandResponse.body.id,
     //         user_id: userMusician.body.user.id,
-    //         memberFunction: 'Guitarrista',
+    //         memberinstrument: 'Guitarrista',
     //       });
 
     //     expect(response.status).toBe(200);
@@ -305,7 +305,7 @@ describe('Band functional test', () => {
     //       password: 'vitor123123',
     //       city: 'salvador',
     //       userMusician: {
-    //         function: 'Baterista',
+    //         instrument: 'Baterista',
     //         musics: [
     //           {
     //             album_image: 'algum-image',
@@ -326,8 +326,8 @@ describe('Band functional test', () => {
     //       name: 'tsBand',
     //       genres: ['6001ee988f0c654298477bd1', '6001ee988f0c654298477bd2'],
     //       members: [
-    //         { name: 'Tie glaubermman', function: 'Baterista' },
-    //         { user: userMusician.body.user.id, function: 'Vocalista' },
+    //         { name: 'Tie glaubermman', instrument: 'Baterista' },
+    //         { user: userMusician.body.user.id, instrument: 'Vocalista' },
     //       ],
     //       album: {
     //         name: 'initial-album',
@@ -356,7 +356,7 @@ describe('Band functional test', () => {
     //       .send({
     //         band_id: bandResponse.body.id,
     //         user_id: userMusician.body.user.id,
-    //         memberFunction: 'Guitarrista',
+    //         memberinstrument: 'Guitarrista',
     //       });
 
     //     expect(response.status).toBe(400);
@@ -373,7 +373,7 @@ describe('Band functional test', () => {
     //       password: 'vitor123123',
     //       city: 'salvador',
     //       userMusician: {
-    //         function: 'Baterista',
+    //         instrument: 'Baterista',
     //         musics: [
     //           {
     //             album_image: 'algum-image',
@@ -393,7 +393,7 @@ describe('Band functional test', () => {
     //     const firstBand = {
     //       name: 'firstBand',
     //       genres: ['6001ee988f0c654298477bd1', '6001ee988f0c654298477bd2'],
-    //       members: [{ name: 'Tie glaubermman', function: 'Baterista' }],
+    //       members: [{ name: 'Tie glaubermman', instrument: 'Baterista' }],
     //       album: {
     //         name: 'initial-album',
     //         genre: '6001ee988f0c654298477bd1',
@@ -413,7 +413,7 @@ describe('Band functional test', () => {
     //     const secondBand = {
     //       name: 'secondBand',
     //       genres: ['6001ee988f0c654298477bd1', '6001ee988f0c654298477bd2'],
-    //       members: [{ name: 'Tie glaubermman', function: 'Baterista' }],
+    //       members: [{ name: 'Tie glaubermman', instrument: 'Baterista' }],
     //       album: {
     //         name: 'initial-album',
     //         genre: '6001ee988f0c654298477bd1',
@@ -433,7 +433,7 @@ describe('Band functional test', () => {
     //     const thirdBand = {
     //       name: 'thirdBand',
     //       genres: ['6001ee988f0c654298477bd1', '6001ee988f0c654298477bd2'],
-    //       members: [{ name: 'Tie glaubermman', function: 'Baterista' }],
+    //       members: [{ name: 'Tie glaubermman', instrument: 'Baterista' }],
     //       album: {
     //         name: 'initial-album',
     //         genre: '6001ee988f0c654298477bd1',
@@ -471,7 +471,7 @@ describe('Band functional test', () => {
     //       .send({
     //         band_id: firstBandResponse.body.id,
     //         user_id: userMusician.body.user.id,
-    //         memberFunction: 'Guitarrista',
+    //         memberinstrument: 'Guitarrista',
     //       });
 
     //     await global.testRequest
@@ -480,7 +480,7 @@ describe('Band functional test', () => {
     //       .send({
     //         band_id: secondBandResponse.body.id,
     //         user_id: userMusician.body.user.id,
-    //         memberFunction: 'Guitarrista',
+    //         memberinstrument: 'Guitarrista',
     //       });
 
     //     await global.testRequest
@@ -489,7 +489,7 @@ describe('Band functional test', () => {
     //       .send({
     //         band_id: thirdBandResponse.body.id,
     //         user_id: userMusician.body.user.id,
-    //         memberFunction: 'Guitarrista',
+    //         memberinstrument: 'Guitarrista',
     //       });
 
     //     const response = await global.testRequest
@@ -498,7 +498,7 @@ describe('Band functional test', () => {
     //       .send({
     //         band_id: thirdBandResponse.body.id,
     //         user_id: userMusician.body.user.id,
-    //         memberFunction: 'Guitarrista',
+    //         memberinstrument: 'Guitarrista',
     //       });
 
     //     expect(response.status).toBe(400);
@@ -512,7 +512,7 @@ describe('Band functional test', () => {
     //     const defaultBand = {
     //       name: 'thirdBand',
     //       genres: ['6001ee988f0c654298477bd1', '6001ee988f0c654298477bd2'],
-    //       members: [{ name: 'Tie glaubermman', function: 'Baterista' }],
+    //       members: [{ name: 'Tie glaubermman', instrument: 'Baterista' }],
     //       album: {
     //         name: 'initial-album',
     //         genre: '6001ee988f0c654298477bd1',
@@ -540,7 +540,7 @@ describe('Band functional test', () => {
     //       .send({
     //         band_id: bandResponse.body.id,
     //         user_id: 'invalid-user',
-    //         memberFunction: 'Guitarrista',
+    //         memberinstrument: 'Guitarrista',
     //       });
 
     //     expect(response.status).toBe(400);
@@ -557,7 +557,7 @@ describe('Band functional test', () => {
     //       password: 'vitor123123',
     //       city: 'salvador',
     //       userMusician: {
-    //         function: 'Baterista',
+    //         instrument: 'Baterista',
     //         musics: [
     //           {
     //             album_image: 'algum-image',
@@ -580,7 +580,7 @@ describe('Band functional test', () => {
     //       .send({
     //         band_id: 'invalid-band',
     //         user_id: userMusician.body.user.id,
-    //         memberFunction: 'Guitarrista',
+    //         memberinstrument: 'Guitarrista',
     //       });
 
     //     expect(response.status).toBe(400);

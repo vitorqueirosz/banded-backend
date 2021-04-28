@@ -8,14 +8,14 @@ import AppError from '@src/utils/errors/appError';
 interface Request {
   user_id: string;
   band_id: string;
-  memberFunction: string;
+  instrument: string;
 }
 
 class AddBandMemberService {
   public async execute({
     user_id,
     band_id,
-    memberFunction,
+    instrument,
   }: Request): Promise<BandMembersModel> {
     const bandExists = await Band.findOne({ _id: band_id });
 
@@ -50,7 +50,7 @@ class AddBandMemberService {
     }
 
     const bandMember = await BandMembers.create({
-      function: memberFunction,
+      instrument,
       user: user_id,
       band: band_id,
     });
