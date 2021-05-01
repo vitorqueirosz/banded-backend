@@ -55,8 +55,6 @@ export const socketInstance = (
     const userLoggedId = socket.user;
     getOnlineUsers();
 
-    console.log(userLoggedId);
-
     socket.on('sended-message', async (data: MessageData) => {
       const payloadMessage = {
         ...data,
@@ -70,8 +68,6 @@ export const socketInstance = (
       );
 
       if (!userOnSocket) return;
-
-      console.log(payloadMessage);
 
       const { chatId } = userOnSocket;
 

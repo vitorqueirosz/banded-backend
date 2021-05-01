@@ -21,6 +21,7 @@ import { GenreController } from './controllers/GenreController';
 import AppError from './utils/errors/appError';
 import { UserAlbumsController } from './controllers/UserAlbumsController';
 import { UserChatsController } from './controllers/UserChatsController';
+import { UserMessageController } from './controllers/UserMessageController';
 
 dotenv.config();
 
@@ -46,6 +47,7 @@ export class SetupServer extends Server {
     const userMusicianController = new UserMusicianController();
     const userAlbumsController = new UserAlbumsController();
     const userChatsController = new UserChatsController();
+    const userMessageController = new UserMessageController();
 
     this.addControllers([
       userController,
@@ -55,6 +57,7 @@ export class SetupServer extends Server {
       userMusicianController,
       userAlbumsController,
       userChatsController,
+      userMessageController,
     ]);
   }
 
