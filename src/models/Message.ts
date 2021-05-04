@@ -2,7 +2,7 @@ import { Schema, model, Document } from 'mongoose';
 
 export interface Message {
   _id?: string;
-  chatId: string;
+  userReceivingId: string;
   user: string;
   text: string;
 }
@@ -12,7 +12,11 @@ interface MessageModel extends Omit<Message, '_id'>, Document {}
 const messageSchema = new Schema(
   {
     user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    chatId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    userReceivingId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     text: { type: String, required: true },
   },
   {

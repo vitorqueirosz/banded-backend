@@ -7,7 +7,7 @@ import { SetupServer } from './server';
 
 type MessageData = {
   chatId: string;
-  userId: string;
+  userReceivingId: string;
   text: string;
 };
 
@@ -62,7 +62,7 @@ export const socketInstance = (
         userId: userLoggedId,
       };
 
-      const userTargedId = data.chatId;
+      const userTargedId = data.userReceivingId;
 
       const userOnSocket = usersConnected.find(
         user => user.userId === userTargedId,
@@ -74,61 +74,51 @@ export const socketInstance = (
 
       const message = await Message.create({
         user: userLoggedId,
-        chatId: userTargedId,
+        userReceivingId: userTargedId,
         text: data.text,
       });
 
-      const hasChatByUser = await Chat.findOne({
-        user: userLoggedId,
-        chatId: userTargedId,
-      });
-
-      if (hasChatByUser) {
-        await Chat.findOneAndUpdate(
-          {
-            user: userLoggedId,
-            chatId: userTargedId,
-          },
-          {
-            $push: { messages: message._id },
-          },
-        );
-      }
-
-      const hasChatByChatId = await Chat.findOne({
-        user: userTargedId,
-        chatId: userLoggedId,
-      });
-
-      if (hasChatByChatId) {
-        await Chat.findOneAndUpdate(
-          {
-            user: userTargedId,
-            chatId: userLoggedId,
-          },
-          {
-            $push: { messages: message._id },
-          },
-        );
-      }
-
-      if (!hasChatByUser && !hasChatByChatId) {
-        await Chat.create({
-          user: userLoggedId,
-          chatId: userTargedId,
-          message: message._id,
-        });
-      }
+      await Chat.findOneAndUpdate(
+        {
+          _id: data.chatId,
+        },
+        {
+          $push: { messages: message._id },
+        },
+      );
 
       io.to(chatId).emit('new-message', payloadMessage);
     });
 
     socket.on('join-private-channel', async (chatId: string) => {
       const { _id, name, avatar } = await User.findOne({ _id: chatId });
+
+      const hasChatByUser = await Chat.findOne({
+        user: userLoggedId,
+        userReceivingId: chatId,
+      });
+
+      const hasChatByChatId = await Chat.findOne({
+        user: chatId,
+        userReceivingId: userLoggedId,
+      });
+
+      let createdChatId = '';
+
+      if (!hasChatByUser && !hasChatByChatId) {
+        const userChat = await Chat.create({
+          user: userLoggedId,
+          userReceivingId: chatId,
+        });
+
+        createdChatId = userChat._id;
+      }
+
       const userJoinnedPayload = {
         id: _id,
         name,
         avatar,
+        chatId: hasChatByUser || hasChatByChatId || createdChatId,
       };
 
       const messages = await Message.find({ user: userLoggedId, chatId });
