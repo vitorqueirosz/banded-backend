@@ -1,6 +1,7 @@
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import { Message } from './models/Message';
+import { Chat } from './models/Chat';
 import { User } from './models/User';
 import { SetupServer } from './server';
 
@@ -71,11 +72,53 @@ export const socketInstance = (
 
       const { chatId } = userOnSocket;
 
-      await Message.create({
+      const message = await Message.create({
         user: userLoggedId,
         chatId: userTargedId,
         text: data.text,
       });
+
+      const hasChatByUser = await Chat.findOne({
+        user: userLoggedId,
+        chatId: userTargedId,
+      });
+
+      if (hasChatByUser) {
+        await Chat.findOneAndUpdate(
+          {
+            user: userLoggedId,
+            chatId: userTargedId,
+          },
+          {
+            $push: { messages: message._id },
+          },
+        );
+      }
+
+      const hasChatByChatId = await Chat.findOne({
+        user: userTargedId,
+        chatId: userLoggedId,
+      });
+
+      if (hasChatByChatId) {
+        await Chat.findOneAndUpdate(
+          {
+            user: userTargedId,
+            chatId: userLoggedId,
+          },
+          {
+            $push: { messages: message._id },
+          },
+        );
+      }
+
+      if (!hasChatByUser && !hasChatByChatId) {
+        await Chat.create({
+          user: userLoggedId,
+          chatId: userTargedId,
+          message: message._id,
+        });
+      }
 
       io.to(chatId).emit('new-message', payloadMessage);
     });

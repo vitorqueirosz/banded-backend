@@ -12,7 +12,7 @@ import { BaseController } from '.';
 @Controller('messages')
 @ClassMiddleware(ensureAuthenticated)
 export class UserMessageController extends BaseController {
-  @Get('latestMessages/:id')
+  @Get('latest-messages/:id')
   @Middleware(ensureAuthenticated)
   public async index(request: Request, response: Response): Promise<Response> {
     try {
