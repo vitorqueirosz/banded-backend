@@ -2,8 +2,7 @@ import { Schema, model, Document } from 'mongoose';
 
 export interface Chat {
   _id?: string;
-  userReceivingId: string;
-  user: string;
+  users: string[];
   messages: string;
 }
 
@@ -11,12 +10,7 @@ export interface ChatModel extends Omit<Chat, '_id'>, Document {}
 
 const chatSchema = new Schema(
   {
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    userReceivingId: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
+    users: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
     messages: [{ type: Schema.Types.ObjectId, ref: 'Message', required: true }],
   },
   {

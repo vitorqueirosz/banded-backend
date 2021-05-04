@@ -93,22 +93,15 @@ export const socketInstance = (
     socket.on('join-private-channel', async (chatId: string) => {
       const { _id, name, avatar } = await User.findOne({ _id: chatId });
 
-      const hasChatByUser = await Chat.findOne({
-        user: userLoggedId,
-        userReceivingId: chatId,
-      });
-
-      const hasChatByChatId = await Chat.findOne({
-        user: chatId,
-        userReceivingId: userLoggedId,
+      const usersChat = await Chat.findOne({
+        users: [userLoggedId, chatId],
       });
 
       let createdChatId = '';
 
-      if (!hasChatByUser && !hasChatByChatId) {
+      if (!usersChat) {
         const userChat = await Chat.create({
-          user: userLoggedId,
-          userReceivingId: chatId,
+          users: [userLoggedId, chatId],
         });
 
         createdChatId = userChat._id;
@@ -118,7 +111,7 @@ export const socketInstance = (
         id: _id,
         name,
         avatar,
-        chatId: hasChatByUser || hasChatByChatId || createdChatId,
+        chatId: usersChat._id || createdChatId,
       };
 
       const messages = await Message.find({ user: userLoggedId, chatId });

@@ -6,7 +6,7 @@ import {
 } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { ensureAuthenticated } from '@src/middlewares/ensureAuthenticated';
-import { Message } from '@src/models/Message';
+import { Chat } from '@src/models/Chat';
 import { BaseController } from '.';
 
 @Controller('messages')
@@ -17,14 +17,19 @@ export class UserMessageController extends BaseController {
   public async index(request: Request, response: Response): Promise<Response> {
     try {
       const user = request.user.id;
-      const chatId = request.params.id;
+      const userReceivingId = request.params.id;
 
-      const latestMessages = await Message.find({
-        chatId,
-        user,
-      }).limit(20);
+      const latestMessages = await Chat.findOne({
+        users: [user, userReceivingId],
+      })
+        .populate({
+          path: 'messages',
+        })
+        .limit(20);
 
-      return response.json({ latestMessages });
+      return response.json({
+        latestMessages: latestMessages?.messages,
+      });
     } catch (error) {
       console.log(error);
       return this.sendCreatedUpdateErrorResponse(response, request, error);
