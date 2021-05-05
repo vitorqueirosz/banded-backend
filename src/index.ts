@@ -57,11 +57,6 @@ export const socketInstance = (
     getOnlineUsers();
 
     socket.on('sended-message', async (data: MessageData) => {
-      const payloadMessage = {
-        ...data,
-        userId: userLoggedId,
-      };
-
       const userTargedId = data.userReceivingId;
 
       const userOnSocket = usersConnected.find(
@@ -87,14 +82,16 @@ export const socketInstance = (
         },
       );
 
-      io.to(chatId).emit('new-message', payloadMessage);
+      io.to(chatId).emit('new-message', message);
     });
 
     socket.on('join-private-channel', async (chatId: string) => {
       const { _id, name, avatar } = await User.findOne({ _id: chatId });
 
       const usersChat = await Chat.findOne({
-        users: [userLoggedId, chatId],
+        users: {
+          $in: [userLoggedId, chatId],
+        },
       });
 
       let createdChatId = '';
@@ -111,10 +108,12 @@ export const socketInstance = (
         id: _id,
         name,
         avatar,
-        chatId: usersChat._id || createdChatId,
+        chatId: usersChat?._id || createdChatId,
       };
 
       const messages = await Message.find({ user: userLoggedId, chatId });
+
+      console.log(createdChatId);
 
       socket.emit('joinned-private-channel', {
         user: userJoinnedPayload,

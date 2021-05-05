@@ -20,11 +20,11 @@ export class UserMessageController extends BaseController {
       const userReceivingId = request.params.id;
 
       const latestMessages = await Chat.findOne({
-        users: [user, userReceivingId],
+        users: {
+          $in: [user, userReceivingId],
+        },
       })
-        .populate({
-          path: 'messages',
-        })
+        .populate({ path: 'messages' })
         .limit(20);
 
       return response.json({
