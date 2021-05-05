@@ -75,14 +75,18 @@ export class UserChatsController extends BaseController {
       });
 
       const formattedUserChats = userChats.map(({ users, messages }: any) => {
-        const user = [users];
+        const [user] = users;
         const lastMessage = messages[messages.length - 1];
 
         return {
-          ...users,
+          id: user.id,
+          name: user.name,
+          avatar: user?.avatar,
           lastMessage: {
-            lastMessage,
-            isReceived: lastMessage.userReceivingId === userLoggedId,
+            id: lastMessage.id,
+            text: lastMessage.text,
+            createdAt: lastMessage.createdAt,
+            isReceived: String(lastMessage.userReceivingId) === userLoggedId,
           },
         };
       });
