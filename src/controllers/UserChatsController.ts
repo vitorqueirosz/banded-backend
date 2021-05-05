@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import {
   ClassMiddleware,
   Controller,
@@ -7,6 +8,7 @@ import {
 import { Request, Response } from 'express';
 import { ensureAuthenticated } from '@src/middlewares/ensureAuthenticated';
 import { User, UserModel } from '@src/models/User';
+import { Chat, ChatModel } from '@src/models/Chat';
 import { BaseController } from '.';
 
 @Controller('chats')
@@ -45,26 +47,47 @@ export class UserChatsController extends BaseController {
   @Middleware(ensureAuthenticated)
   public async search(request: Request, response: Response): Promise<Response> {
     try {
-      const { name } = request.query;
       const userLoggedId = request.user.id;
 
-      let users: UserModel[] = [];
+      const userChats = await Chat.find({
+        users: {
+          $in: [userLoggedId],
+        },
+      })
+        .populate([
+          { path: 'users' },
+          {
+            path: 'messages',
+            // populate: {
+            //   path: 'users',
+            //   model: 'users',
+            // },
+          },
+        ])
+        .limit(15);
 
-      if (!name) return response.json([]);
+      userChats.forEach((user: any) => {
+        const checkUserLoggedIn = user.users.findIndex(
+          (user: any) => user.id === userLoggedId,
+        );
 
-      users = await User.find({
-        name: new RegExp(String(name)),
+        user.users.splice(checkUserLoggedIn, 1);
       });
 
-      const checkHasSameUser = users.findIndex(
-        user => user.id === userLoggedId,
-      );
+      const formattedUserChats = userChats.map(({ users, messages }: any) => {
+        const user = [users];
+        const lastMessage = messages[messages.length - 1];
 
-      if (checkHasSameUser !== -1) {
-        users.splice(checkHasSameUser, 1);
-      }
+        return {
+          ...users,
+          lastMessage: {
+            lastMessage,
+            isReceived: lastMessage.userReceivingId === userLoggedId,
+          },
+        };
+      });
 
-      return response.json(users);
+      return response.json(formattedUserChats);
     } catch (error) {
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
