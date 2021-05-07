@@ -113,8 +113,6 @@ export const socketInstance = (
 
       const messages = await Message.find({ user: userLoggedId, chatId });
 
-      console.log(createdChatId);
-
       socket.emit('joinned-private-channel', {
         user: userJoinnedPayload,
         messages,

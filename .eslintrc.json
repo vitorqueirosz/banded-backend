@@ -36,7 +36,9 @@
         "no-useless-constructor": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
         "import/prefer-default-export": "off",
-        "prettier/prettier": "error",
+        "prettier/prettier": ["error", {
+            "endOfLine":"auto"
+          }],
         "camelcase": "off",
         "class-methods-use-this": "off"
     },

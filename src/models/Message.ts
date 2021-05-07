@@ -5,9 +5,11 @@ export interface Message {
   userReceivingId: string;
   user: string;
   text: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-interface MessageModel extends Omit<Message, '_id'>, Document {}
+export interface MessageModel extends Omit<Message, '_id'>, Document {}
 
 const messageSchema = new Schema(
   {

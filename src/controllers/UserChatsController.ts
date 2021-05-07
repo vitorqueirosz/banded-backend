@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import {
   ClassMiddleware,
   Controller,
@@ -8,90 +7,62 @@ import {
 import { Request, Response } from 'express';
 import { ensureAuthenticated } from '@src/middlewares/ensureAuthenticated';
 import { User, UserModel } from '@src/models/User';
-import { Chat, ChatModel } from '@src/models/Chat';
+import { MessageModel } from '@src/models/Message';
+import { Chat } from '@src/models/Chat';
+import { checkIsTheSameUser } from '@src/utils/checkIsTheSameUser';
+import { formattedUserChats } from '@src/utils/formatUserChatsResponse';
 import { BaseController } from '.';
+
+export type UserChat = {
+  users: UserModel[];
+  messages: MessageModel[];
+  _id: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 @Controller('chats')
 @ClassMiddleware(ensureAuthenticated)
 export class UserChatsController extends BaseController {
-  @Get('search')
+  @Get('')
   @Middleware(ensureAuthenticated)
   public async index(request: Request, response: Response): Promise<Response> {
     try {
       const { name } = request.query;
       const userLoggedId = request.user.id;
 
-      let users: UserModel[] = [];
-
-      if (!name) return response.json([]);
-
-      users = await User.find({
+      const userChatsId = await User.find({
         name: new RegExp(String(name)),
       });
 
-      const checkHasSameUser = users.findIndex(
-        user => user.id === userLoggedId,
+      const checkedUserChats = checkIsTheSameUser(userChatsId, userLoggedId);
+
+      const [userChats] = await Promise.all(
+        checkedUserChats.map(async user => {
+          const usersOnChat: UserChat[] = [];
+
+          const userChat = await Chat.findOne({
+            users: {
+              $in: [user.id],
+            },
+          }).populate([
+            { path: 'users' },
+            {
+              path: 'messages',
+            },
+          ]);
+
+          usersOnChat.push(userChat);
+          return usersOnChat;
+        }),
       );
 
-      if (checkHasSameUser !== -1) {
-        users.splice(checkHasSameUser, 1);
-      }
+      const formattedUserChatsList = formattedUserChats(
+        userChats,
+        userLoggedId,
+      );
 
-      return response.json(users);
-    } catch (error) {
-      return this.sendCreatedUpdateErrorResponse(response, request, error);
-    }
-  }
-
-  @Get('')
-  @Middleware(ensureAuthenticated)
-  public async search(request: Request, response: Response): Promise<Response> {
-    try {
-      const userLoggedId = request.user.id;
-
-      const userChats = await Chat.find({
-        users: {
-          $in: [userLoggedId],
-        },
-      })
-        .populate([
-          { path: 'users' },
-          {
-            path: 'messages',
-            // populate: {
-            //   path: 'users',
-            //   model: 'users',
-            // },
-          },
-        ])
-        .limit(15);
-
-      userChats.forEach((user: any) => {
-        const checkUserLoggedIn = user.users.findIndex(
-          (user: any) => user.id === userLoggedId,
-        );
-
-        user.users.splice(checkUserLoggedIn, 1);
-      });
-
-      const formattedUserChats = userChats.map(({ users, messages }: any) => {
-        const [user] = users;
-        const lastMessage = messages[messages.length - 1];
-
-        return {
-          id: user.id,
-          name: user.name,
-          avatar: user?.avatar,
-          lastMessage: {
-            id: lastMessage.id,
-            text: lastMessage.text,
-            createdAt: lastMessage.createdAt,
-            isReceived: String(lastMessage.userReceivingId) === userLoggedId,
-          },
-        };
-      });
-
-      return response.json(formattedUserChats);
+      return response.json(formattedUserChatsList);
     } catch (error) {
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
