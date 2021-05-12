@@ -16,6 +16,7 @@ import { BaseController } from '.';
 export type UserChat = {
   users: UserModel[];
   messages: MessageModel[];
+  chatId: string;
   _id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -40,7 +41,6 @@ export class UserChatsController extends BaseController {
       const [userChats] = await Promise.all(
         checkedUserChats.map(async user => {
           const usersOnChat: UserChat[] = [];
-
           const userChat = await Chat.findOne({
             users: {
               $in: [user.id],
@@ -52,7 +52,23 @@ export class UserChatsController extends BaseController {
             },
           ]);
 
-          usersOnChat.push(userChat);
+          if (userChat && userChat.messages.length) {
+            const filteredUserChat = checkIsTheSameUser(
+              userChat.users,
+              userLoggedId,
+            );
+
+            const formattedUserChat = {
+              users: filteredUserChat,
+              chatId: userChat.id,
+              messages: userChat.messages,
+            };
+
+            usersOnChat.push((formattedUserChat as unknown) as UserChat);
+          } else if (name) {
+            usersOnChat.push((user as unknown) as UserChat);
+          }
+
           return usersOnChat;
         }),
       );
@@ -62,8 +78,9 @@ export class UserChatsController extends BaseController {
         userLoggedId,
       );
 
-      return response.json(formattedUserChatsList);
+      return response.json({ chats: formattedUserChatsList ?? [] });
     } catch (error) {
+      console.log(error);
       return this.sendCreatedUpdateErrorResponse(response, request, error);
     }
   }

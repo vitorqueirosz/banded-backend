@@ -16,15 +16,22 @@ export const formattedUserChats = (
   userChats: UserChat[],
   userLoggedId: string,
 ): UserChatsFormattedResponse => {
-  return userChats.map(({ users, messages }) => {
+  return userChats?.map(({ users = [], messages = [], chatId }, index) => {
+    let userNotExists: any;
+
     const [user] = users;
     const lastMessage = messages[messages.length - 1];
 
+    if (!user) {
+      userNotExists = userChats[index];
+    }
+
     return {
-      id: user.id,
-      name: user.name,
-      avatar: user?.avatar,
-      lastMessage: {
+      id: user?.id ?? userNotExists?._id,
+      name: user?.name ?? userNotExists?.name,
+      avatar: user?.avatar ?? userNotExists?.avatar,
+      chatId,
+      lastMessage: lastMessage && {
         id: lastMessage.id,
         text: lastMessage.text,
         createdAt: lastMessage.createdAt,

@@ -49,8 +49,6 @@ export class UserController extends BaseController {
         instrument,
       });
 
-      const token = AuthService.generateToken(newUser.toJSON());
-
       if (albums?.length) {
         await Promise.all(
           albums.map(async (album: UserAlbum) => {
@@ -89,7 +87,10 @@ export class UserController extends BaseController {
       if (musics?.length) {
         await Promise.all(
           musics.map(async (music: UserMusics) => {
-            const userMusics = new UserMusics({ ...music, user: newUser._id });
+            const userMusics = new UserMusics({
+              ...music,
+              user: newUser._id,
+            });
 
             await userMusics.save();
 
@@ -99,6 +100,8 @@ export class UserController extends BaseController {
       }
 
       await musician.save();
+
+      const token = AuthService.generateToken(newUser.toJSON());
 
       return response
         .status(201)

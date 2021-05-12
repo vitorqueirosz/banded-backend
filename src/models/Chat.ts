@@ -1,9 +1,10 @@
 import { Schema, model, Document } from 'mongoose';
+import { Message } from './Message';
 
 export interface Chat {
   _id?: string;
   users: string[];
-  messages: string;
+  messages: Message[];
 }
 
 export interface ChatModel extends Omit<Chat, '_id'>, Document {}

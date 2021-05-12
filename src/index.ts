@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
-import { Message } from './models/Message';
+import { Message, MessageModel } from './models/Message';
 import { Chat } from './models/Chat';
 import { User } from './models/User';
 import { SetupServer } from './server';
@@ -67,22 +67,36 @@ export const socketInstance = (
 
       const { chatId } = userOnSocket;
 
-      const message = await Message.create({
+      const { id, userReceivingId, text, createdAt } = await Message.create({
         user: userLoggedId,
         userReceivingId: userTargedId,
         text: data.text,
       });
+
+      const { user } = await Message.findOne({
+        user: userLoggedId,
+      }).populate('user');
+
+      const messagePayload = {
+        id: user.id,
+        name: user.name,
+        avatar: user?.avatar,
+        messageId: id,
+        userReceivingId,
+        text,
+        createdAt,
+      };
 
       await Chat.findOneAndUpdate(
         {
           _id: data.chatId,
         },
         {
-          $push: { messages: message._id },
+          $push: { messages: id },
         },
       );
 
-      io.to(chatId).emit('new-message', message);
+      io.to(chatId).emit('new-message', messagePayload);
     });
 
     socket.on('join-private-channel', async (chatId: string) => {

@@ -6,7 +6,7 @@ import {
 } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { ensureAuthenticated } from '@src/middlewares/ensureAuthenticated';
-import { Chat } from '@src/models/Chat';
+import { Chat, ChatModel } from '@src/models/Chat';
 import { BaseController } from '.';
 
 @Controller('messages')
@@ -19,7 +19,7 @@ export class UserMessageController extends BaseController {
       const user = request.user.id;
       const userReceivingId = request.params.id;
 
-      const latestMessages = await Chat.findOne({
+      const latestMessages: ChatModel = await Chat.findOne({
         users: {
           $in: [user, userReceivingId],
         },
@@ -27,8 +27,18 @@ export class UserMessageController extends BaseController {
         .populate({ path: 'messages' })
         .limit(20);
 
+      const formatedLatestMessages = latestMessages?.messages.map(
+        ({ _id, createdAt, text, userReceivingId, user }) => ({
+          user,
+          messageId: _id,
+          userReceivingId,
+          text,
+          createdAt,
+        }),
+      );
+
       return response.json({
-        latestMessages: latestMessages?.messages,
+        latestMessages: formatedLatestMessages,
       });
     } catch (error) {
       console.log(error);
