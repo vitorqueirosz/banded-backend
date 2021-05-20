@@ -1,6 +1,6 @@
 import { Controller, Get, Middleware, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
-import { User } from '@src/models/User';
+import { User, UserModel } from '@src/models/User';
 import AuthService from '@src/services/authService';
 import multer from 'multer';
 import uploadConfig from '@src/config/upload';
@@ -9,6 +9,8 @@ import UserBandService from '@src/services/UserBandsService';
 import { UserMusician } from '@src/models/UserMusician';
 import { UserMusics } from '@src/models/UserMusics';
 import { UserAlbums } from '@src/models/UserAlbums';
+import { Namespace } from 'socket.io';
+import { checkIsTheSameUser } from '@src/utils/checkIsTheSameUser';
 import { BaseController } from '.';
 
 const upload = multer(uploadConfig);
@@ -203,5 +205,53 @@ export class UserController extends BaseController {
     const token = AuthService.generateToken(user.toJSON());
 
     return response.status(200).send({ user: { ...user.toJSON() }, token });
+  }
+
+  @Get('search')
+  @Middleware(ensureAuthenticated)
+  public async search(request: Request, response: Response): Promise<Response> {
+    try {
+      const user_id = request.user.id;
+      const { name } = request.query;
+
+      const users: UserModel[] = await User.find({
+        name: new RegExp(String(name)),
+      });
+
+      const filteredUsers = checkIsTheSameUser(users, user_id);
+
+      const usersMusicianList: UserMusician[] = [];
+
+      const [usersMusician] = await Promise.all(
+        filteredUsers.map(async user => {
+          const {
+            instrument,
+            user: { name, id, avatar },
+          } = await UserMusician.findOne({
+            user: user._id,
+          }).populate('user');
+
+          if (user) {
+            const formattedUserMusician = {
+              id,
+              instrument,
+              name,
+              avatar,
+            };
+
+            usersMusicianList.push(
+              (formattedUserMusician as unknown) as UserMusician,
+            );
+          }
+
+          return usersMusicianList;
+        }),
+      );
+
+      return response.json(usersMusician ?? []);
+    } catch (error) {
+      console.log(error);
+      return this.sendCreatedUpdateErrorResponse(response, request, error);
+    }
   }
 }

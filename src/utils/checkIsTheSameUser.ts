@@ -4,13 +4,9 @@ export const checkIsTheSameUser = (
   userChats: UserModel[],
   userLoggedId: string,
 ): UserModel[] => {
-  const checkHasSameUser = userChats.findIndex(
-    user => user.id === userLoggedId,
+  const usersWithoutUserLoggedIn = userChats.filter(
+    user => user.id !== userLoggedId,
   );
 
-  if (checkHasSameUser !== -1) {
-    userChats.splice(checkHasSameUser, 1);
-  }
-
-  return userChats;
+  return usersWithoutUserLoggedIn;
 };
