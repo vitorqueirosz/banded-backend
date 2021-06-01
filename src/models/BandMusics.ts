@@ -8,7 +8,7 @@ export interface BandMusics {
   name: string;
   genre: Genre;
   band: string;
-  duration: number;
+  duration: string;
   album: BandAlbumsResponse;
 }
 
@@ -19,7 +19,7 @@ const bandMusicsSchema = new Schema(
     name: { type: String, required: true },
     genre: { type: Schema.Types.ObjectId, ref: 'Genre', required: true },
     band: { type: Schema.Types.ObjectId, ref: 'Band', required: true },
-    duration: { type: Number, required: true },
+    duration: { type: String, required: true },
     album: { type: Schema.Types.ObjectId, ref: 'BandAlbums', required: false },
   },
   {

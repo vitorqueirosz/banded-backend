@@ -38,9 +38,10 @@ export class UserChatsController extends BaseController {
 
       const checkedUserChats = checkIsTheSameUser(userChatsId, userLoggedId);
 
+      const usersOnChat: UserChat[] = [];
+
       const [userChats] = await Promise.all(
         checkedUserChats.map(async user => {
-          const usersOnChat: UserChat[] = [];
           const userChat = await Chat.findOne({
             users: {
               $in: [user.id],

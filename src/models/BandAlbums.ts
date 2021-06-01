@@ -6,8 +6,9 @@ export interface BandAlbums {
   _id?: string;
   name: string;
   genre: Genre;
+  image: string;
   band: string;
-  year: number;
+  year_release: number;
   musics: BandMusic[];
 }
 
@@ -18,7 +19,8 @@ const bandAlbumsSchema = new Schema(
     name: { type: String, required: true },
     genre: { type: Schema.Types.ObjectId, ref: 'Genre', required: true },
     band: { type: Schema.Types.ObjectId, ref: 'Band', required: true },
-    year: { type: Number, required: true },
+    image: { type: String, required: false },
+    year_release: { type: Number, required: true },
     musics: [
       { type: Schema.Types.ObjectId, ref: 'BandMusics', required: true },
     ],

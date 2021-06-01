@@ -7,7 +7,7 @@ import { BandMusics } from './BandMusics';
 export interface Band {
   _id?: string;
   name: string;
-  image: string;
+  image?: string;
   owner: string;
   city: string;
   musics: BandMusics[];
@@ -26,10 +26,10 @@ const bandSchema = new Schema(
     owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     genres: [{ type: Schema.Types.ObjectId, ref: 'Genre', required: true }],
     musics: [
-      { type: Schema.Types.ObjectId, ref: 'BandMusics', required: true },
+      { type: Schema.Types.ObjectId, ref: 'BandMusics', required: false },
     ],
     albums: [
-      { type: Schema.Types.ObjectId, ref: 'BandAlbums', required: true },
+      { type: Schema.Types.ObjectId, ref: 'BandAlbums', required: false },
     ],
     members: [
       { type: Schema.Types.ObjectId, ref: 'BandMembers', required: true },
@@ -53,19 +53,5 @@ bandSchema.virtual('genre', {
   foreignField: 'genre',
   justOne: false,
 });
-
-// bandSchema.virtual('musics', {
-//   ref: 'BandMusics',
-//   localField: '_id',
-//   foreignField: 'band',
-//   justOne: false,
-// });
-
-// bandSchema.virtual('members', {
-//   ref: 'BandMembers',
-//   localField: '_id',
-//   foreignField: 'band',
-//   justOne: false,
-// });
 
 export const Band = model<BandModel>('Band', bandSchema);

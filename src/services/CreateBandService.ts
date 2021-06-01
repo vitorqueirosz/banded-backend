@@ -10,7 +10,7 @@ interface Request {
   name: string;
   city: string;
   owner: string;
-  image: string;
+  image?: string;
   musics: BandMusics[];
   genres: string[];
   members: BandMembers[];
@@ -59,7 +59,8 @@ class CreateBandService {
           const bandAlbum = new BandAlbums({
             name: album.name,
             genre: album.genre,
-            year: album.year,
+            year_release: album.year_release,
+            iamge: album.image,
             band: band._id,
           });
 

@@ -9,8 +9,8 @@ import UserBandService from '@src/services/UserBandsService';
 import { UserMusician } from '@src/models/UserMusician';
 import { UserMusics } from '@src/models/UserMusics';
 import { UserAlbums } from '@src/models/UserAlbums';
-import { Namespace } from 'socket.io';
 import { checkIsTheSameUser } from '@src/utils/checkIsTheSameUser';
+import { getImageByPreview } from '@src/utils/getImage';
 import { BaseController } from '.';
 
 const upload = multer(uploadConfig);
@@ -36,14 +36,6 @@ export class UserController extends BaseController {
 
       const albumImages = request.files as Express.Multer.File[];
 
-      const getAlbumImageByPreview = (previewImg: string) => {
-        const splitImageName = (img: Express.Multer.File) =>
-          img.filename.substr(21);
-
-        return albumImages.find(img => splitImageName(img) === previewImg)
-          ?.filename;
-      };
-
       const musician = await UserMusician.create({
         user: newUser._id,
         bands,
@@ -57,7 +49,7 @@ export class UserController extends BaseController {
             const { album_name, year_release, checkImage } = album;
 
             const userAlbums = new UserAlbums({
-              album_image: getAlbumImageByPreview(checkImage),
+              album_image: getImageByPreview(albumImages, checkImage),
               album_name,
               user: newUser._id,
               year_release,

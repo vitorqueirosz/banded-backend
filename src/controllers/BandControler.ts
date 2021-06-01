@@ -1,28 +1,36 @@
 import { Controller, Post, Get, Middleware } from '@overnightjs/core';
 import { ensureAuthenticated } from '@src/middlewares/ensureAuthenticated';
 import AddBandMemberService from '@src/services/AddBandMemberService';
-
 import uploadConfig from '@src/config/upload';
 import multer from 'multer';
-
 import CreateBandService from '@src/services/CreateBandService';
 import FindBandByFiltersService from '@src/services/FindBandByFiltersService';
 import FindBandService from '@src/services/FindBandService';
 import FindBandsService from '@src/services/FindBandsService';
 import { Request, Response } from 'express';
+import { getImageByPreview } from '@src/utils/getImage';
 import { BaseController } from '.';
 
 const upload = multer(uploadConfig);
+
 @Controller('band')
 export class BandController extends BaseController {
   @Post('')
-  @Middleware([ensureAuthenticated, upload.single('image')])
+  @Middleware([ensureAuthenticated, upload.array('image')])
   public async create(request: Request, response: Response): Promise<Response> {
     try {
-      const { name, city, musics, genres, members, albums } = request.body;
-      const image = request.file.filename;
+      const {
+        name,
+        city,
+        musics,
+        genres,
+        members,
+        albums,
+        bandImage,
+      } = request.body;
 
       const owner = request.user.id;
+      const images = request.files as Express.Multer.File[];
 
       const createBandService = new CreateBandService();
 
@@ -30,11 +38,11 @@ export class BandController extends BaseController {
         name,
         city,
         musics: JSON.parse(musics),
+        albums: JSON.parse(albums),
         genres: JSON.parse(genres),
         members: JSON.parse(members),
         owner,
-        image,
-        albums: JSON.parse(albums),
+        image: getImageByPreview(images, bandImage),
       });
 
       return response.status(201).json(band);
